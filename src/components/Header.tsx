@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
               className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:scale-105 transition-all"
             >
               <Send className="w-4 h-4" />
-              <span>Telegram Channel</span>
+              <span>Telegram Thiện</span>
               <Sparkles className="w-3.5 h-3.5 text-blue-200 animate-pulse" />
             </a>
           </div>

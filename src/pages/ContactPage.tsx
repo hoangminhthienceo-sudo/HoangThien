@@ -193,9 +193,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ setActiveTab }) => {
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-500 uppercase">Email Đối Tác & Cố Vấn</div>
-                  <a href="mailto:contact@hoangminhthien.com" className="text-sm font-extrabold text-slate-900 hover:text-[#2563EB]">
-                    contact@hoangminhthien.com
+                  <div className="text-xs font-bold text-slate-500 uppercase">Email của Thiện</div>
+                  <a href="mailto:hoangminhthien.ceo@gmail.com" className="text-sm font-extrabold text-slate-900 hover:text-[#2563EB]">
+                    hoangminhthien.ceo@gmail.com
                   </a>
                   <p className="text-[11px] text-slate-500 mt-0.5">Xử lý mail trong 24 giờ làm việc</p>
                 </div>
@@ -206,7 +206,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ setActiveTab }) => {
                   <Send className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-500 uppercase">Telegram Channel</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase">Telegram Thiện</div>
                   <a href="https://t.me/hoangminhthien" target="_blank" rel="noreferrer" className="text-sm font-extrabold text-[#2563EB] hover:underline">
                     t.me/hoangminhthien
                   </a>
@@ -244,15 +244,15 @@ export const ContactPage: React.FC<ContactPageProps> = ({ setActiveTab }) => {
               </p>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl flex items-center space-x-2 text-xs font-bold text-white transition-all">
+                <a href="https://www.youtube.com/@hoangminhthien" target="_blank" rel="noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl flex items-center space-x-2 text-xs font-bold text-white transition-all">
                   <Youtube className="w-4 h-4 text-red-500" />
                   <span>YouTube Channel</span>
                 </a>
-                <a href="https://t.me/hoangminhthien" target="_blank" rel="noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl flex items-center space-x-2 text-xs font-bold text-white transition-all">
+                <a href="https://t.me/taisansotradecoinvn" target="_blank" rel="noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl flex items-center space-x-2 text-xs font-bold text-white transition-all">
                   <Send className="w-4 h-4 text-sky-400" />
                   <span>Telegram Hub</span>
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl flex items-center space-x-2 text-xs font-bold text-white transition-all">
+                <a href="https://www.facebook.com/hoangminhthien.tradecoinvn" target="_blank" rel="noreferrer" className="p-3 bg-white/10 hover:bg-white/20 rounded-xl flex items-center space-x-2 text-xs font-bold text-white transition-all">
                   <Facebook className="w-4 h-4 text-blue-400" />
                   <span>Facebook Fanpage</span>
                 </a>

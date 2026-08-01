@@ -132,7 +132,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
             </h4>
             <p className="text-xs text-slate-300 mb-2 flex items-center">
               <Mail className="w-3.5 h-3.5 text-blue-400 mr-2" />
-              <span>Email: <a href="mailto:contact@hoangminhthien.com" className="text-blue-300 hover:underline">contact@hoangminhthien.com</a></span>
+              <span>Email: <a href="mailto:hoangminhthien.ceo@gmail.com" className="text-blue-300 hover:underline">hoangminhthien.ceo@gmail.com</a></span>
             </p>
             <p className="text-xs text-slate-300 mb-4 flex items-center">
               <Phone className="w-3.5 h-3.5 text-blue-400 mr-2" />
@@ -141,13 +141,13 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
 
             {/* Social Icons matching Hình 3 */}
             <div className="flex items-center space-x-2 pt-1">
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube Channel" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all">
+              <a href="https://www.youtube.com/@hoangminhthien" target="_blank" rel="noreferrer" aria-label="YouTube Channel" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="https://t.me/hoangminhthien" target="_blank" rel="noreferrer" aria-label="Telegram Channel" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all">
+              <a href="https://t.me/hoangminhthien" target="_blank" rel="noreferrer" aria-label="Telegram Thiện" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-[#0088cc] hover:text-white transition-all">
                 <Send className="w-4 h-4" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook Page" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
+              <a href="https://www.facebook.com/hoangminhthien.tradecoinvn" target="_blank" rel="noreferrer" aria-label="Facebook Page" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
                 <Facebook className="w-4 h-4" />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="X Twitter" className="w-9 h-9 rounded-full bg-slate-800 text-slate-200 flex items-center justify-center hover:bg-black hover:text-white transition-all">

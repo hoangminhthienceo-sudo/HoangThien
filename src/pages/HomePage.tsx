@@ -1,4 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import heroImage from '../assets/images/regenerated_image_1785579948519.jpg';
+import workshop1Image from '../assets/images/regenerated_image_1785579950219.jpg';
+import workshop2Image from '../assets/images/regenerated_image_1785579958169.jpg';
+import workshop3Image from '../assets/images/regenerated_image_1785579961975.jpg';
+import workshop4Image from '../assets/images/regenerated_image_1785579966067.jpg';
 import { NavTab } from '../types';
 import { COURSES_DATA } from '../data/coursesData';
 import { PROJECTS_DATA } from '../data/projectsData';
@@ -41,10 +46,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
     let step = 0;
 
     const targets = {
-      tiktok: 100000,
-      youtube: 50000,
-      telegram: 20000,
-      facebook: 30000,
+      tiktok: 70000,
+      youtube: 200000,
+      telegram: 100000,
+      facebook: 150000,
       zalo: 10000
     };
 
@@ -121,13 +126,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                   Kênh Truyền Thông Chính Thức
                 </p>
                 <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                  <a href="https://facebook.com" target="_blank" rel="noreferrer" className="px-4 py-2 bg-white rounded-xl border border-[#E0F2FE] text-slate-700 hover:text-[#2563EB] hover:border-[#93C5FD] font-semibold text-xs flex items-center space-x-2 shadow-sm transition-all">
+                  <a href="https://www.facebook.com/hoangminhthien.tradecoinvn" target="_blank" rel="noreferrer" className="px-4 py-2 bg-white rounded-xl border border-[#E0F2FE] text-slate-700 hover:text-[#2563EB] hover:border-[#93C5FD] font-semibold text-xs flex items-center space-x-2 shadow-sm transition-all">
                     <span>Facebook</span>
                   </a>
                   <a href="https://tiktok.com" target="_blank" rel="noreferrer" className="px-4 py-2 bg-white rounded-xl border border-[#E0F2FE] text-slate-700 hover:text-black hover:border-slate-400 font-semibold text-xs flex items-center space-x-2 shadow-sm transition-all">
                     <span>TikTok</span>
                   </a>
-                  <a href="https://youtube.com" target="_blank" rel="noreferrer" className="px-4 py-2 bg-white rounded-xl border border-[#E0F2FE] text-slate-700 hover:text-red-600 hover:border-red-300 font-semibold text-xs flex items-center space-x-2 shadow-sm transition-all">
+                  <a href="https://www.youtube.com/@hoangminhthien" target="_blank" rel="noreferrer" className="px-4 py-2 bg-white rounded-xl border border-[#E0F2FE] text-slate-700 hover:text-red-600 hover:border-red-300 font-semibold text-xs flex items-center space-x-2 shadow-sm transition-all">
                     <span>YouTube</span>
                   </a>
                   <a href="https://t.me/hoangminhthien" target="_blank" rel="noreferrer" className="px-4 py-2 bg-white rounded-xl border border-[#E0F2FE] text-[#2563EB] hover:bg-[#2563EB] hover:text-white font-semibold text-xs flex items-center space-x-2 shadow-sm transition-all">
@@ -152,7 +157,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                 {/* Profile Card Container */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white border-4 border-white aspect-[4/5]">
                   <img 
-                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80" 
+                    src={heroImage} 
                     alt="HoangMinhThien - Chuyên gia cố vấn đầu tư" 
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
                     loading="eager"
@@ -299,7 +304,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
               
               <div className="group relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-100">
                 <img 
-                  src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80" 
+                  src={workshop1Image} 
                   alt="Diễn Thuyết Tại Workshop Tài Chính" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   loading="lazy"
@@ -313,7 +318,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
 
               <div className="group relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-100">
                 <img 
-                  src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" 
+                  src={workshop2Image} 
                   alt="Gặp Gỡ Đối Tác & Quỹ Đầu Tư" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   loading="lazy"
@@ -327,7 +332,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
 
               <div className="group relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-100">
                 <img 
-                  src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" 
+                  src={workshop3Image} 
                   alt="Lớp Đào Tạo Chuyên Sâu Masterclass" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   loading="lazy"
@@ -341,7 +346,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
 
               <div className="group relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-100">
                 <img 
-                  src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80" 
+                  src={workshop4Image} 
                   alt="Offline Tín Hiệu & Giao Lưu" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   loading="lazy"
@@ -370,7 +375,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-4">
               Sự Tin Tưởng & Kết Nối Từ Cộng Đồng
             </h2>
-            <p className="text-slate-600">Được theo dõi và đồng hành bởi hơn 200.000 nhà đầu tư trên khắp các nền tảng truyền thông.</p>
+            <p className="text-slate-600">Được theo dõi và đồng hành bởi hơn 500.000 nhà đầu tư trên khắp các nền tảng truyền thông.</p>
           </div>
 
           {/* Stats Grid */}
@@ -587,13 +592,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
 
               <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
                 <a 
-                  href="https://t.me/hoangminhthien" 
+                  href="https://t.me/taisansotradecoinvn" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="px-8 py-4 bg-white text-[#2563EB] rounded-xl font-extrabold hover:bg-blue-50 transition-all shadow-lg flex items-center justify-center space-x-2"
                 >
                   <Send className="w-5 h-5 text-[#2563EB]" />
-                  <span>Gia Nhập Telegram Ngay</span>
+                  <span>Join Team Telegram</span>
                 </a>
                 <button 
                   onClick={() => setActiveTab('contact')}
