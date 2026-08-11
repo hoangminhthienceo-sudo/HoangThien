@@ -28,6 +28,7 @@ import {
   updatePost,
   uploadMedia,
 } from '../../lib/wordpressAdmin';
+import { WP_COURSES_CATEGORY, WP_PROJECTS_CATEGORY } from '../../lib/wordpress';
 
 interface PostsTabProps {
   credentials: WPCredentials;
@@ -50,7 +51,9 @@ const EMPTY_DRAFT: DraftPost = {
   title: '',
   content: '',
   excerpt: '',
-  status: 'draft',
+  // Mặc định đăng luôn: viết bài mới là để nó hiện ra ngoài site.
+  // Muốn giữ nháp thì đổi ở ô trạng thái ngay cạnh nút Lưu.
+  status: 'publish',
   categories: [],
   tags: [],
   featuredMediaId: 0,
@@ -63,6 +66,31 @@ const STATUS_LABELS: Record<AdminPost['status'], string> = {
   pending: 'Chờ duyệt',
   private: 'Riêng tư',
   future: 'Hẹn giờ',
+};
+
+/**
+ * Bài chỉ hiện ngoài site khi vừa ĐÃ ĐĂNG vừa thuộc 1 trong 2 danh mục gốc.
+ * Thiếu một trong hai là bài nằm im trong WordPress — đây là chỗ dễ nhầm nhất
+ * nên báo thẳng ra sau khi lưu.
+ */
+const describeVisibility = (
+  draft: DraftPost,
+  roots: { courses?: WPTermSummary; projects?: WPTermSummary }
+): string => {
+  const page =
+    roots.courses && draft.categories.includes(roots.courses.id)
+      ? 'trang Khoá Học'
+      : roots.projects && draft.categories.includes(roots.projects.id)
+        ? 'trang Review Dự Án'
+        : null;
+
+  if (draft.status !== 'publish') {
+    return 'Đã lưu vào WordPress, nhưng bài đang ở trạng thái nháp nên chưa hiện ngoài site. Đổi ô trạng thái sang "Đăng công khai" rồi lưu lại.';
+  }
+  if (!page) {
+    return 'Đã đăng, nhưng bài chưa thuộc danh mục Khoá Học hay Review Dự Án nên chưa hiện ngoài site. Tích một trong hai ở khung Danh mục rồi lưu lại.';
+  }
+  return `Đã đăng lên WordPress. Bài sẽ hiện ở ${page}.`;
 };
 
 const STATUS_STYLES: Record<AdminPost['status'], string> = {
@@ -146,7 +174,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
         return [saved, ...others];
       });
       setDraft({ ...draft, id: saved.id, featuredMediaUrl: saved.featuredMediaUrl });
-      setNotice('Đã lưu bài viết lên WordPress.');
+      setNotice(describeVisibility(draft, rootCategories));
     } catch (err) {
       setNotice(err instanceof Error ? err.message : 'Lưu thất bại');
     } finally {
@@ -208,6 +236,24 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
     () => [...tags].sort((a, b) => a.name.localeCompare(b.name, 'vi')),
     [tags]
   );
+
+  /** 2 danh mục gốc quyết định bài hiện ở trang nào ngoài site */
+  const rootCategories = useMemo(
+    () => ({
+      courses: categories.find((c) => c.slug === WP_COURSES_CATEGORY),
+      projects: categories.find((c) => c.slug === WP_PROJECTS_CATEGORY),
+    }),
+    [categories]
+  );
+
+  /** Bài sẽ hiện ở đâu ngoài site, hoặc null nếu chưa chọn danh mục gốc nào */
+  const destination = useMemo(() => {
+    if (!draft) return null;
+    const { courses, projects } = rootCategories;
+    if (courses && draft.categories.includes(courses.id)) return 'trang Khoá Học';
+    if (projects && draft.categories.includes(projects.id)) return 'trang Review Dự Án';
+    return null;
+  }, [draft, rootCategories]);
 
   // -------------------------------------------------------------------------
   // Màn hình soạn bài
@@ -344,25 +390,50 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
             <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm p-5">
               <h3 className="text-sm font-extrabold text-slate-900 mb-1">Danh mục</h3>
               <p className="text-[11px] text-slate-500 mb-3 leading-relaxed">
-                Chọn <strong>Khoá Học</strong> hoặc <strong>Review Dự Án</strong> để bài hiện ở đúng
-                trang, kèm 1 danh mục chủ đề.
+                Bài phải thuộc <strong>Khoá Học</strong> hoặc <strong>Review Dự Án</strong> mới hiện
+                được ngoài site. Nên chọn thêm 1 danh mục chủ đề.
               </p>
+
+              {destination ? (
+                <div className="mb-3 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 font-semibold">
+                  Bài sẽ hiện ở {destination}
+                </div>
+              ) : (
+                <div className="mb-3 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-800 leading-relaxed">
+                  <strong>Chưa chọn danh mục gốc.</strong> Bài lưu xong sẽ nằm im trong WordPress,
+                  không hiện ngoài site.
+                </div>
+              )}
+
               <div className="space-y-1.5 max-h-56 overflow-y-auto">
-                {categories.map((category) => (
-                  <label
-                    key={category.id}
-                    className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-[#F8FBFF] cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={draft.categories.includes(category.id)}
-                      onChange={() => patchDraft({ categories: toggleTerm(draft.categories, category.id) })}
-                      className="w-4 h-4 accent-[#2563EB]"
-                    />
-                    <span className="text-xs font-semibold text-slate-700">{category.name}</span>
-                    <span className="ml-auto text-[10px] text-slate-400">{category.count}</span>
-                  </label>
-                ))}
+                {categories.map((category) => {
+                  const isRoot =
+                    category.slug === WP_COURSES_CATEGORY || category.slug === WP_PROJECTS_CATEGORY;
+                  return (
+                    <label
+                      key={category.id}
+                      className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-[#F8FBFF] cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={draft.categories.includes(category.id)}
+                        onChange={() => patchDraft({ categories: toggleTerm(draft.categories, category.id) })}
+                        className="w-4 h-4 accent-[#2563EB]"
+                      />
+                      <span
+                        className={`text-xs ${isRoot ? 'font-extrabold text-[#2563EB]' : 'font-semibold text-slate-700'}`}
+                      >
+                        {category.name}
+                      </span>
+                      {isRoot && (
+                        <span className="text-[9px] font-bold text-[#2563EB] bg-[#F0F7FF] px-1.5 py-0.5 rounded">
+                          GỐC
+                        </span>
+                      )}
+                      <span className="ml-auto text-[10px] text-slate-400">{category.count}</span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
