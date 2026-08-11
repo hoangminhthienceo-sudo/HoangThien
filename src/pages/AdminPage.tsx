@@ -393,7 +393,14 @@ export const AdminPage: React.FC = () => {
         )}
 
         {/* Nội dung tab */}
-        {isAdmin && effectiveTab === 'content' && <ContentTab settings={draft} onChange={setDraft} />}
+        {isAdmin && effectiveTab === 'content' && (
+          <ContentTab
+            settings={draft}
+            onChange={setDraft}
+            credentials={credentials}
+            permissions={user.permissions}
+          />
+        )}
         {isAdmin && effectiveTab === 'links' && <LinksTab settings={draft} onChange={setDraft} />}
         {effectiveTab === 'posts' && (
           <PostsTab credentials={credentials} permissions={user.permissions} />

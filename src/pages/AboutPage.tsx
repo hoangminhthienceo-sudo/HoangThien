@@ -1,11 +1,8 @@
 import React from 'react';
 import heroImage from '../assets/images/regenerated_image_1785579948519.jpg';
-import workshop1Image from '../assets/images/regenerated_image_1785579950219.jpg';
-import workshop2Image from '../assets/images/regenerated_image_1785579958169.jpg';
-import workshop3Image from '../assets/images/regenerated_image_1785579961975.jpg';
-import workshop4Image from '../assets/images/regenerated_image_1785579966067.jpg';
 import { NavTab } from '../types';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { EventGallery } from '../components/EventGallery';
 import {
   Award,
   Users,
@@ -36,13 +33,6 @@ const PILLAR_STYLES = [
   { color: 'text-[#2563EB]', node: <TrendingUp className="w-5 h-5 mr-2" /> },
   { color: 'text-emerald-600', node: <ShieldAlert className="w-5 h-5 mr-2" /> },
   { color: 'text-indigo-600', node: <Users className="w-5 h-5 mr-2" /> },
-];
-
-const GALLERY_IMAGES = [
-  { image: workshop1Image, title: 'Diễn Thuyết Tại Workshop Tài Chính', caption: 'Chia sẻ góc nhìn kinh tế vĩ mô' },
-  { image: workshop2Image, title: 'Gặp Gỡ Đối Tác & Quỹ Đầu Tư', caption: 'Thẩm định dự án thực tế' },
-  { image: workshop3Image, title: 'Lớp Đào Tạo Chuyên Sâu Masterclass', caption: 'Hướng dẫn học viên 1-1' },
-  { image: workshop4Image, title: 'Offline Tín Hiệu & Giao Lưu', caption: 'Kết nối thành viên Telegram' },
 ];
 
 export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
@@ -206,26 +196,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
             <p className="text-sm text-slate-500 mt-1">{aboutPage.gallerySubtitle}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {GALLERY_IMAGES.map((item) => (
-              <div
-                key={item.title}
-                className="group relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-100"
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-90"></div>
-                <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <p className="text-xs font-bold">{item.title}</p>
-                  <p className="text-[10px] text-slate-300">{item.caption}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <EventGallery items={settings.gallery} />
         </div>
 
         {/* Closing CTA */}

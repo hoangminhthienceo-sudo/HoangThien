@@ -6,10 +6,22 @@
  * Nếu WP chưa cấu hình / không kết nối được, site chạy bằng đúng file này.
  */
 import { SOCIAL_CHANNELS, SocialChannel, TELEGRAM_MAIN_URL, TELEGRAM_TEAM_URL } from './socialLinks';
+import workshop1Image from '../assets/images/regenerated_image_1785579950219.jpg';
+import workshop2Image from '../assets/images/regenerated_image_1785579958169.jpg';
+import workshop3Image from '../assets/images/regenerated_image_1785579961975.jpg';
+import workshop4Image from '../assets/images/regenerated_image_1785579966067.jpg';
 
 export interface Pillar {
   title: string;
   description: string;
+}
+
+/** Một ảnh trong khối "Hình Ảnh Sự Kiện & Hội Thảo Thực Chiến" */
+export interface GalleryItem {
+  /** Đường dẫn ảnh — ảnh mặc định đi kèm mã nguồn, hoặc link ảnh tải lên WordPress */
+  image: string;
+  title: string;
+  caption: string;
 }
 
 export interface Milestone {
@@ -76,6 +88,8 @@ export interface SiteSettings {
     closingTitle: string;
     closingSubtitle: string;
   };
+  /** Thư viện ảnh sự kiện, dùng chung cho trang chủ và trang Giới Thiệu */
+  gallery: GalleryItem[];
   social: SocialChannel[];
   contact: {
     email: string;
@@ -227,6 +241,29 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     closingSubtitle:
       'Xem các khoá học thực chiến hoặc liên hệ trực tiếp để được cố vấn phân bổ vốn.',
   },
+
+  gallery: [
+    {
+      image: workshop1Image,
+      title: 'Diễn Thuyết Tại Workshop Tài Chính',
+      caption: 'Chia sẻ góc nhìn kinh tế vĩ mô',
+    },
+    {
+      image: workshop2Image,
+      title: 'Gặp Gỡ Đối Tác & Quỹ Đầu Tư',
+      caption: 'Thẩm định dự án thực tế',
+    },
+    {
+      image: workshop3Image,
+      title: 'Lớp Đào Tạo Chuyên Sâu Masterclass',
+      caption: 'Hướng dẫn học viên 1-1',
+    },
+    {
+      image: workshop4Image,
+      title: 'Offline Tín Hiệu & Giao Lưu',
+      caption: 'Kết nối thành viên Telegram',
+    },
+  ],
 
   social: SOCIAL_CHANNELS,
 

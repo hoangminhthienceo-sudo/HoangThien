@@ -1,5 +1,7 @@
 import React from 'react';
 import { SiteSettings } from '../../data/siteSettings';
+import { WPCredentials, WPPermissions } from '../../lib/wordpressAdmin';
+import { ImageField } from './ImageField';
 import {
   InlineInput,
   InlineTextArea,
@@ -12,6 +14,8 @@ import {
 interface ContentTabProps {
   settings: SiteSettings;
   onChange: (settings: SiteSettings) => void;
+  credentials: WPCredentials | null;
+  permissions: WPPermissions;
 }
 
 const Section: React.FC<{ title: string; description: string; children: React.ReactNode }> = ({
@@ -28,7 +32,12 @@ const Section: React.FC<{ title: string; description: string; children: React.Re
   </section>
 );
 
-export const ContentTab: React.FC<ContentTabProps> = ({ settings, onChange }) => {
+export const ContentTab: React.FC<ContentTabProps> = ({
+  settings,
+  onChange,
+  credentials,
+  permissions,
+}) => {
   // Cập nhật một nhánh của settings mà không đụng các nhánh khác
   const patch = <K extends keyof SiteSettings>(key: K, value: Partial<SiteSettings[K]>) =>
     onChange({ ...settings, [key]: { ...(settings[key] as object), ...value } as SiteSettings[K] });
@@ -203,6 +212,42 @@ export const ContentTab: React.FC<ContentTabProps> = ({ settings, onChange }) =>
           label="Mô tả thư viện ảnh"
           value={settings.homeAbout.gallerySubtitle}
           onChange={(gallerySubtitle) => patch('homeAbout', { gallerySubtitle })}
+        />
+      </Section>
+
+      <Section
+        title="Hình ảnh sự kiện & hội thảo"
+        description="Thư viện ảnh hiển thị ở cuối khối Câu Chuyện Làm Nghề (trang chủ) và trang Giới Thiệu"
+      >
+        <Repeater
+          label="Danh sách ảnh"
+          hint="Ảnh ngang tỉ lệ 16:9, tối thiểu 800px chiều ngang. Nên để 4 ảnh cho vừa một hàng."
+          items={settings.gallery}
+          onChange={(gallery) => onChange({ ...settings, gallery })}
+          makeEmpty={() => ({ image: '', title: '', caption: '' })}
+          addLabel="Thêm ảnh"
+          renderItem={(item, update) => (
+            <>
+              <ImageField
+                value={item.image}
+                onChange={(image) => update({ image })}
+                credentials={credentials}
+                canUpload={permissions.canUploadFiles}
+              />
+              <InlineInput
+                label="Tiêu đề ảnh"
+                value={item.title}
+                onChange={(title) => update({ title })}
+                placeholder="vd: Diễn Thuyết Tại Workshop Tài Chính"
+              />
+              <InlineInput
+                label="Chú thích"
+                value={item.caption}
+                onChange={(caption) => update({ caption })}
+                placeholder="vd: Chia sẻ góc nhìn kinh tế vĩ mô"
+              />
+            </>
+          )}
         />
       </Section>
 

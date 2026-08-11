@@ -279,6 +279,22 @@ Chỉ Quản trị viên làm được.
 3. Bấm **Xem trước** để xem thử (chỉ mình bạn thấy)
 4. Ưng rồi bấm **Lưu lên WordPress** — lúc này mọi khách mới thấy
 
+## Đổi ảnh sự kiện & hội thảo
+
+Chỉ Quản trị viên làm được.
+
+1. Vào `#admin`, tab **Nội dung trang**
+2. Kéo xuống mục **Hình ảnh sự kiện & hội thảo**
+3. Với mỗi ảnh:
+   - Bấm **Tải ảnh từ máy** để đổi ảnh
+   - Sửa **Tiêu đề ảnh** và **Chú thích** (chữ hiện đè lên góc dưới ảnh)
+   - Bấm biểu tượng thùng rác để xoá ảnh đó
+4. Bấm **Thêm ảnh** nếu muốn thêm
+5. Bấm **Lưu lên WordPress**
+
+Ảnh dùng chung cho cả trang chủ và trang Giới Thiệu. Nên để **4 ảnh** cho vừa một
+hàng, ảnh ngang tỉ lệ 16:9, tối thiểu 800px chiều ngang.
+
 ## Đổi link mạng xã hội
 
 Tab **Liên kết** — sửa link Facebook, TikTok, YouTube, Telegram, X, số người theo
