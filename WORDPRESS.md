@@ -19,8 +19,40 @@ Sau khi cài xong, kiểm tra REST API đã mở chưa bằng cách mở link n�
 https://cms.hoangminhthien.com/wp-json/wp/v2/posts
 ```
 
-Thấy dữ liệu JSON hiện ra là đạt. Nếu báo lỗi 404, vào **Settings → Permalinks**,
-chọn **Post name** rồi bấm Save.
+Thấy dữ liệu JSON hiện ra là đạt.
+
+### Nếu báo lỗi 404 ở đây
+
+Đây là lỗi hay gặp nhất. Nguyên nhân gần như luôn là một trong hai:
+
+1. **Permalink đang ở chế độ Plain.** Địa chỉ `/wp-json/` chỉ tồn tại khi permalink
+   khác Plain. Vào **Settings → Permalinks**, chọn **Post name**, bấm **Save Changes**
+   (bấm Save kể cả khi đã đúng — thao tác này ép WordPress ghi lại file `.htaccess`).
+
+2. **Apache đặt `AllowOverride None`** khiến `.htaccess` bị bỏ qua. Kiểm tra file
+   `.htaccess` ở thư mục gốc WordPress phải có khối:
+
+   ```apache
+   # BEGIN WordPress
+   <IfModule mod_rewrite.c>
+   RewriteEngine On
+   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+   RewriteBase /
+   RewriteRule ^index\.php$ - [L]
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule . /index.php [L]
+   </IfModule>
+   # END WordPress
+   ```
+
+   Dòng `E=HTTP_AUTHORIZATION` rất quan trọng: thiếu nó thì Apache nuốt mất header
+   `Authorization`, và đăng nhập trang Admin bằng Application Password sẽ luôn báo sai
+   mật khẩu dù nhập đúng.
+
+Site đã được viết để **chịu được cả hai trường hợp** — nếu `/wp-json/` không chạy, nó tự
+chuyển sang dạng `/?rest_route=/wp/v2/posts` vốn luôn hoạt động. Nhưng vẫn nên sửa cho
+đúng vì dạng `/wp-json/` gọn và nhanh hơn.
 
 ## 2. Tạo 2 danh mục gốc
 

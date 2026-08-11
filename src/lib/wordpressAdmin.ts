@@ -8,7 +8,7 @@
  * LƯU Ý BẢO MẬT: đây là SPA thuần nên mọi lời gọi API đều chạy từ trình duyệt.
  * Chỉ đăng nhập trên máy tin cậy và luôn dùng HTTPS cho domain WordPress.
  */
-import { WP_BASE_URL, isWordPressEnabled } from './wordpress';
+import { isWordPressEnabled, wpFetch } from './wordpress';
 import { SiteSettings } from '../data/siteSettings';
 
 const SESSION_KEY = 'hmt_wp_credentials';
@@ -77,7 +77,7 @@ async function authedRequest<T>(
   path: string,
   init: RequestInit = {}
 ): Promise<T> {
-  const response = await fetch(`${WP_BASE_URL}${path}`, {
+  const response = await wpFetch(path, {
     ...init,
     headers: {
       Accept: 'application/json',
@@ -112,7 +112,7 @@ export const verifyCredentials = async (credentials: WPCredentials): Promise<WPU
   }
   const user = await authedRequest<{ id: number; name: string; capabilities?: Record<string, boolean> }>(
     credentials,
-    '/wp-json/wp/v2/users/me?context=edit'
+    '/wp/v2/users/me?context=edit'
   );
   return {
     id: user.id,
@@ -125,12 +125,12 @@ export const verifyCredentials = async (credentials: WPCredentials): Promise<WPU
 // Cài đặt site (nội dung chữ & link của các trang)
 // ---------------------------------------------------------------------------
 
-const SETTINGS_PATH = '/wp-json/hmt/v1/settings';
+const SETTINGS_PATH = '/hmt/v1/settings';
 
 /** Đọc cài đặt công khai — không cần đăng nhập, dùng cho site cho khách xem */
 export const fetchSiteSettings = async (signal?: AbortSignal): Promise<Partial<SiteSettings> | null> => {
   if (!isWordPressEnabled()) return null;
-  const response = await fetch(`${WP_BASE_URL}${SETTINGS_PATH}`, {
+  const response = await wpFetch(SETTINGS_PATH, {
     signal,
     headers: { Accept: 'application/json' },
   });
@@ -206,7 +206,7 @@ export const listPosts = async (
 ): Promise<AdminPost[]> => {
   const posts = await authedRequest<WPRawPost[]>(
     credentials,
-    `/wp-json/wp/v2/posts?context=edit&status=any&per_page=${perPage}&_embed=wp:featuredmedia&orderby=date&order=desc`
+    `/wp/v2/posts?context=edit&status=any&per_page=${perPage}&_embed=wp:featuredmedia&orderby=date&order=desc`
   );
   return posts.map(toAdminPost);
 };
@@ -225,7 +225,7 @@ export const createPost = async (
   credentials: WPCredentials,
   payload: PostPayload
 ): Promise<AdminPost> => {
-  const post = await authedRequest<WPRawPost>(credentials, '/wp-json/wp/v2/posts?context=edit&_embed=wp:featuredmedia', {
+  const post = await authedRequest<WPRawPost>(credentials, '/wp/v2/posts?context=edit&_embed=wp:featuredmedia', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
@@ -239,7 +239,7 @@ export const updatePost = async (
 ): Promise<AdminPost> => {
   const post = await authedRequest<WPRawPost>(
     credentials,
-    `/wp-json/wp/v2/posts/${id}?context=edit&_embed=wp:featuredmedia`,
+    `/wp/v2/posts/${id}?context=edit&_embed=wp:featuredmedia`,
     { method: 'POST', body: JSON.stringify(payload) }
   );
   return toAdminPost(post);
@@ -247,7 +247,7 @@ export const updatePost = async (
 
 /** Chuyển bài vào thùng rác (không xoá vĩnh viễn) */
 export const trashPost = async (credentials: WPCredentials, id: number): Promise<void> => {
-  await authedRequest(credentials, `/wp-json/wp/v2/posts/${id}`, { method: 'DELETE' });
+  await authedRequest(credentials, `/wp/v2/posts/${id}`, { method: 'DELETE' });
 };
 
 // ---------------------------------------------------------------------------
@@ -267,7 +267,7 @@ const listTerms = async (
 ): Promise<WPTermSummary[]> =>
   authedRequest<WPTermSummary[]>(
     credentials,
-    `/wp-json/wp/v2/${taxonomy}?per_page=100&orderby=count&order=desc`
+    `/wp/v2/${taxonomy}?per_page=100&orderby=count&order=desc`
   );
 
 export const listCategories = (credentials: WPCredentials) => listTerms(credentials, 'categories');
@@ -278,7 +278,7 @@ export const createTag = async (
   credentials: WPCredentials,
   name: string
 ): Promise<WPTermSummary> =>
-  authedRequest<WPTermSummary>(credentials, '/wp-json/wp/v2/tags', {
+  authedRequest<WPTermSummary>(credentials, '/wp/v2/tags', {
     method: 'POST',
     body: JSON.stringify({ name }),
   });
@@ -298,7 +298,7 @@ export const uploadMedia = async (
 
   const media = await authedRequest<{ id: number; source_url: string }>(
     credentials,
-    '/wp-json/wp/v2/media',
+    '/wp/v2/media',
     { method: 'POST', body: form }
   );
 

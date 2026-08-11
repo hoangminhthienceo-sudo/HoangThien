@@ -1,0 +1,55 @@
+# WordPress chạy trên máy để phát triển & thử nghiệm.
+#
+# ĐÂY KHÔNG PHẢI BẢN CHẠY THẬT: nó chỉ sống trên máy này, khách truy cập
+# hoangminhthien.com không thấy được. Khi lên production vẫn cần hosting thật,
+# lúc đó chỉ việc đổi VITE_WP_API_URL sang domain thật.
+#
+#   Khởi động:  docker compose -f wordpress-local/docker-compose.yml up -d
+#   Dừng lại:   docker compose -f wordpress-local/docker-compose.yml down
+#   Xoá sạch:   docker compose -f wordpress-local/docker-compose.yml down -v
+
+services:
+  db:
+    image: mariadb:11
+    container_name: hmt-wp-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:6-php8.3-apache
+    container_name: hmt-wp
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      # 8080 hay bị WSL chiếm nên dùng 8888
+      - '8888:80'
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      # Bật hiển thị lỗi để dễ soi khi phát triển
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wp_data:/var/www/html
+      # mu-plugins tự kích hoạt, không cần bật tay trong WP Admin
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins
+      # Bật AllowOverride để .htaccess chạy, nhờ đó /wp-json/ mới route được
+      - ./apache-htaccess.conf:/etc/apache2/conf-enabled/zz-htaccess.conf:ro
+
+volumes:
+  db_data:
+  wp_data:

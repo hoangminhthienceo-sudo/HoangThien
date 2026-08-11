@@ -193,8 +193,61 @@ export const mapPostToProject = (post: WPPost): ProjectReview => {
 // Gọi API
 // ---------------------------------------------------------------------------
 
+/**
+ * WordPress phục vụ REST API theo 2 kiểu địa chỉ:
+ *   - "pretty": /wp-json/wp/v2/posts       (khi permalink KHÔNG ở chế độ Plain)
+ *   - "query" : /?rest_route=/wp/v2/posts  (luôn chạy, kể cả permalink Plain)
+ *
+ * Nhiều site để permalink Plain hoặc Apache đặt AllowOverride None khiến kiểu
+ * "pretty" trả 404. Ta thử "pretty" trước, hỏng thì tự chuyển sang "query" và
+ * nhớ lại để các lần sau khỏi thử lại.
+ */
+type RouteStyle = 'pretty' | 'query';
+
+let resolvedRouteStyle: RouteStyle | null = null;
+
+/** routePath dạng '/wp/v2/posts?per_page=10' (không kèm tiền tố /wp-json) */
+export const buildRestUrl = (routePath: string, style: RouteStyle): string => {
+  if (style === 'pretty') {
+    return `${WP_BASE_URL}/wp-json${routePath}`;
+  }
+  const [route, query] = routePath.split('?');
+  const extra = query ? `&${query}` : '';
+  return `${WP_BASE_URL}/?rest_route=${encodeURIComponent(route)}${extra}`;
+};
+
+/** Phản hồi hợp lệ = có JSON. WordPress trả HTML 404 của Apache khi sai kiểu địa chỉ. */
+const looksLikeJson = (response: Response): boolean =>
+  (response.headers.get('content-type') ?? '').includes('json');
+
+/**
+ * Gọi REST API WordPress, tự chọn kiểu địa chỉ chạy được.
+ * Dùng chung cho cả phần đọc công khai lẫn phần ghi ở trang Admin.
+ */
+export const wpFetch = async (routePath: string, init: RequestInit = {}): Promise<Response> => {
+  const order: RouteStyle[] = resolvedRouteStyle
+    ? [resolvedRouteStyle]
+    : ['pretty', 'query'];
+
+  let lastResponse: Response | null = null;
+
+  for (const style of order) {
+    const response = await fetch(buildRestUrl(routePath, style), init);
+
+    // Chỉ coi là "sai kiểu địa chỉ" khi 404 mà nội dung không phải JSON
+    const wrongStyle = response.status === 404 && !looksLikeJson(response);
+    if (!wrongStyle) {
+      resolvedRouteStyle = style;
+      return response;
+    }
+    lastResponse = response;
+  }
+
+  return lastResponse as Response;
+};
+
 const request = async <T>(path: string, signal?: AbortSignal): Promise<T> => {
-  const response = await fetch(`${WP_BASE_URL}/wp-json/wp/v2${path}`, {
+  const response = await wpFetch(`/wp/v2${path}`, {
     signal,
     headers: { Accept: 'application/json' },
   });
