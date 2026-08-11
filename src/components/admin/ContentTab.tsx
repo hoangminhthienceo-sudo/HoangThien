@@ -126,6 +126,21 @@ export const ContentTab: React.FC<ContentTabProps> = ({
           onChange={(channelsLabel) => patch('hero', { channelsLabel })}
         />
 
+        <div className="p-4 rounded-xl bg-[#F8FBFF] border border-[#E0F2FE] space-y-3">
+          <p className="text-[11px] text-slate-500">
+            Ảnh chân dung dùng ở đầu trang chủ và trang Giới Thiệu. Nên dùng ảnh dọc tỉ lệ 4:5,
+            khuôn mặt nằm ở nửa trên.
+          </p>
+          <ImageField
+            label="Ảnh chân dung"
+            value={settings.hero.portraitImage}
+            onChange={(portraitImage) => patch('hero', { portraitImage })}
+            credentials={credentials}
+            canUpload={permissions.canUploadFiles}
+            aspect="portrait"
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <TextField
             label="Chức danh trên ảnh"

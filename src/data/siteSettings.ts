@@ -6,6 +6,7 @@
  * Nếu WP chưa cấu hình / không kết nối được, site chạy bằng đúng file này.
  */
 import { SOCIAL_CHANNELS, SocialChannel, TELEGRAM_MAIN_URL, TELEGRAM_TEAM_URL } from './socialLinks';
+import portraitImage from '../assets/images/regenerated_image_1785579948519.jpg';
 import workshop1Image from '../assets/images/regenerated_image_1785579950219.jpg';
 import workshop2Image from '../assets/images/regenerated_image_1785579958169.jpg';
 import workshop3Image from '../assets/images/regenerated_image_1785579961975.jpg';
@@ -56,6 +57,8 @@ export interface SiteSettings {
     primaryCta: string;
     secondaryCta: string;
     channelsLabel: string;
+    /** Ảnh chân dung ở đầu trang chủ và trang Giới Thiệu */
+    portraitImage: string;
     profileRole: string;
     profileName: string;
     profileNote: string;
@@ -124,6 +127,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     primaryCta: 'Khám Phá Khoá Học',
     secondaryCta: 'Tham Gia Telegram',
     channelsLabel: 'Kênh Truyền Thông Chính Thức',
+    portraitImage: portraitImage,
     profileRole: 'Founder & Lead Analyst',
     profileName: 'Hoàng Minh Thiên',
     profileNote: '10 Năm Kinh Nghiệm Thực Chiến Thị Trường Tài Chính',

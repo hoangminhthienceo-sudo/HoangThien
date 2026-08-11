@@ -279,6 +279,17 @@ Chỉ Quản trị viên làm được.
 3. Bấm **Xem trước** để xem thử (chỉ mình bạn thấy)
 4. Ưng rồi bấm **Lưu lên WordPress** — lúc này mọi khách mới thấy
 
+## Đổi ảnh chân dung
+
+Chỉ Quản trị viên làm được. Đây là ảnh lớn ở đầu trang chủ và trang Giới Thiệu.
+
+1. Vào `#admin`, tab **Nội dung trang**
+2. Mục **Khối Hero (đầu trang chủ)** → tìm ô **Ảnh chân dung**
+3. Bấm **Tải ảnh từ máy**, chọn ảnh
+4. Bấm **Lưu lên WordPress**
+
+Nên dùng **ảnh dọc tỉ lệ 4:5**, khuôn mặt nằm ở nửa trên (phần dưới ảnh bị chữ che).
+
 ## Đổi ảnh sự kiện & hội thảo
 
 Chỉ Quản trị viên làm được.

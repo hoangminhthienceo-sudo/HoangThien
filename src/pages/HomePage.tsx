@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import heroImage from '../assets/images/regenerated_image_1785579948519.jpg';
 import { NavTab } from '../types';
 import { useCourses, useProjects } from '../hooks/useContent';
 import { useSiteSettings } from '../hooks/useSiteSettings';
@@ -200,7 +199,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                 {/* Profile Card Container */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white border-4 border-white aspect-[4/5]">
                   <img
-                    src={heroImage}
+                    src={hero.portraitImage}
                     alt={`${hero.profileName} - Chuyên gia cố vấn đầu tư`}
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
                     loading="eager"

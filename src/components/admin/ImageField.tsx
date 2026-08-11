@@ -9,6 +9,8 @@ interface ImageFieldProps {
   /** Cho phép tải ảnh lên (tài khoản phải có quyền upload_files) */
   canUpload: boolean;
   label?: string;
+  /** Khung xem trước: 'video' cho ảnh ngang 16:9, 'portrait' cho ảnh dọc 4:5 */
+  aspect?: 'video' | 'portrait';
 }
 
 /**
@@ -21,6 +23,7 @@ export const ImageField: React.FC<ImageFieldProps> = ({
   credentials,
   canUpload,
   label = 'Ảnh',
+  aspect = 'video',
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -47,7 +50,11 @@ export const ImageField: React.FC<ImageFieldProps> = ({
 
       <div className="mt-1 flex gap-3">
         {/* Xem trước */}
-        <div className="relative w-32 shrink-0 aspect-video rounded-lg overflow-hidden bg-[#F0F7FF] border border-[#E0F2FE]">
+        <div
+          className={`relative shrink-0 rounded-lg overflow-hidden bg-[#F0F7FF] border border-[#E0F2FE] ${
+            aspect === 'portrait' ? 'w-24 aspect-[4/5]' : 'w-32 aspect-video'
+          }`}
+        >
           {value ? (
             <>
               <img src={value} alt="" className="w-full h-full object-cover" />

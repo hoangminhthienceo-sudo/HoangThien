@@ -1,5 +1,4 @@
 import React from 'react';
-import heroImage from '../assets/images/regenerated_image_1785579948519.jpg';
 import { NavTab } from '../types';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { EventGallery } from '../components/EventGallery';
@@ -91,7 +90,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
 
             <div className="lg:col-span-5 relative min-h-[320px] lg:min-h-0">
               <img
-                src={heroImage}
+                src={hero.portraitImage}
                 alt={`${hero.profileName} - Chuyên gia cố vấn đầu tư`}
                 className="w-full h-full object-cover object-top"
                 loading="eager"
