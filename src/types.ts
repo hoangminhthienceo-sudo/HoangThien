@@ -1,4 +1,14 @@
-export type NavTab = 'home' | 'courses' | 'projects' | 'contact';
+export type NavTab = 'home' | 'about' | 'courses' | 'projects' | 'contact';
+
+/**
+ * Thẻ (tag) của bài viết. Khi bật WordPress, danh sách này lấy trực tiếp
+ * từ tag anh/chị gắn trong WP Admin (Bài viết > Thẻ).
+ */
+export interface PostTag {
+  id: number;
+  slug: string;
+  name: string;
+}
 
 export interface Course {
   id: string;
@@ -16,7 +26,10 @@ export interface Course {
   rating: number;
   studentsCount: number;
   curriculum: string[];
+  tags: PostTag[];
   isFeatured?: boolean;
+  /** Link bài gốc trên WordPress (chỉ có khi bài đến từ WP) */
+  sourceUrl?: string;
 }
 
 export interface ProjectReview {
@@ -36,6 +49,9 @@ export interface ProjectReview {
   risks: string[];
   onChainMetrics?: string;
   author: string;
+  tags: PostTag[];
+  /** Link bài gốc trên WordPress (chỉ có khi bài đến từ WP) */
+  sourceUrl?: string;
 }
 
 export interface ContactFormData {

@@ -1,4 +1,39 @@
-import { ProjectReview } from '../types';
+import { PostTag, ProjectReview } from '../types';
+
+/** Bảng màu badge theo kết luận thẩm định — dùng chung cho dữ liệu tĩnh & bài từ WordPress */
+export const VERDICT_COLORS: Record<ProjectReview['verdict'], string> = {
+  'Tiềm Năng Cao': 'bg-blue-100 text-blue-700 border-blue-200',
+  'An Toàn & Bền Vững': 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  'Cảnh Báo Rủi Ro': 'bg-amber-100 text-amber-800 border-amber-200',
+  'Cơ Hội Lớn': 'bg-purple-100 text-purple-700 border-purple-200',
+};
+
+export const verdictColorFor = (verdict: ProjectReview['verdict']): string =>
+  VERDICT_COLORS[verdict] ?? VERDICT_COLORS['Tiềm Năng Cao'];
+
+/** Ép giá trị custom field "verdict" từ WordPress về đúng 1 trong 4 kết luận hợp lệ */
+export const normalizeVerdict = (value: string | undefined): ProjectReview['verdict'] => {
+  const allowed = Object.keys(VERDICT_COLORS) as ProjectReview['verdict'][];
+  return allowed.find((v) => v === value?.trim()) ?? 'Tiềm Năng Cao';
+};
+
+/** Thẻ dùng cho dữ liệu tĩnh. Khi bật WordPress, thẻ lấy trực tiếp từ WP Admin. */
+const PROJECT_TAGS = {
+  layer2: { id: 101, slug: 'layer-2', name: 'Layer 2' },
+  ethereum: { id: 102, slug: 'ethereum', name: 'Ethereum' },
+  tokenomics: { id: 103, slug: 'tokenomics', name: 'Tokenomics' },
+  bds: { id: 104, slug: 'bat-dong-san', name: 'Bất động sản' },
+  dongTien: { id: 105, slug: 'dong-tien', name: 'Dòng tiền' },
+  phapLy: { id: 106, slug: 'phap-ly', name: 'Pháp lý' },
+  rwa: { id: 107, slug: 'rwa', name: 'RWA' },
+  defi: { id: 108, slug: 'defi', name: 'DeFi' },
+  coPhieu: { id: 109, slug: 'co-phieu', name: 'Cổ phiếu' },
+  coTuc: { id: 110, slug: 'co-tuc', name: 'Cổ tức' },
+  gamefi: { id: 111, slug: 'gamefi', name: 'GameFi' },
+  airdrop: { id: 112, slug: 'airdrop', name: 'Airdrop' },
+  canhBao: { id: 113, slug: 'canh-bao-rui-ro', name: 'Cảnh báo rủi ro' },
+  onchain: { id: 114, slug: 'onchain', name: 'On-chain' },
+} satisfies Record<string, PostTag>;
 
 export const PROJECT_CATEGORIES = [
   { id: 'all', label: 'Tất cả Dự Án' },
@@ -35,7 +70,8 @@ export const PROJECTS_DATA: ProjectReview[] = [
       'Cạnh tranh gay gắt từ các giải pháp Zero-Knowledge (ZK-Rollups) như ZKSync, Starknet.'
     ],
     onChainMetrics: 'Số lượng ví hoạt động hàng ngày (Daily Active Addresses) duy trì trung bình 180k ví.',
-    author: 'Hoàng Minh Thiên'
+    author: 'Hoàng Minh Thiên',
+    tags: [PROJECT_TAGS.layer2, PROJECT_TAGS.ethereum, PROJECT_TAGS.onchain, PROJECT_TAGS.tokenomics]
   },
   {
     id: 'proj-2',
@@ -60,7 +96,8 @@ export const PROJECTS_DATA: ProjectReview[] = [
       'Phụ thuộc vào biến động chung của ngành du lịch nội địa.'
     ],
     onChainMetrics: 'Dòng tiền cho thuê thực tế ghi nhận 15-18 triệu VNĐ/tháng.',
-    author: 'Hoàng Minh Thiên'
+    author: 'Hoàng Minh Thiên',
+    tags: [PROJECT_TAGS.bds, PROJECT_TAGS.dongTien, PROJECT_TAGS.phapLy]
   },
   {
     id: 'proj-3',
@@ -85,7 +122,8 @@ export const PROJECTS_DATA: ProjectReview[] = [
       'Phụ thuộc vào mặt bằng lãi suất của Cục Dự trữ Liên bang (FED).'
     ],
     onChainMetrics: 'TVL tăng trưởng ổn định 12% mỗi tháng trong suốt 6 tháng qua.',
-    author: 'Hoàng Minh Thiên'
+    author: 'Hoàng Minh Thiên',
+    tags: [PROJECT_TAGS.rwa, PROJECT_TAGS.defi, PROJECT_TAGS.tokenomics, PROJECT_TAGS.onchain]
   },
   {
     id: 'proj-4',
@@ -110,7 +148,8 @@ export const PROJECTS_DATA: ProjectReview[] = [
       'Chính sách giá điện quy định bởi cơ quan quản lý nhà nước.'
     ],
     onChainMetrics: 'Khối lượng giao dịch khớp lệnh bình quân 2.5 triệu cổ phiếu/phiên.',
-    author: 'Hoàng Minh Thiên'
+    author: 'Hoàng Minh Thiên',
+    tags: [PROJECT_TAGS.coPhieu, PROJECT_TAGS.coTuc, PROJECT_TAGS.dongTien]
   },
   {
     id: 'proj-5',
@@ -135,7 +174,8 @@ export const PROJECTS_DATA: ProjectReview[] = [
       'Cần thêm thời gian để mở rộng tập người dùng thực sự ngoài thị trường Crypto.'
     ],
     onChainMetrics: 'Khối lượng DEX Volume hàng tuần vượt mốc 1.8 Tỷ USD.',
-    author: 'Hoàng Minh Thiên'
+    author: 'Hoàng Minh Thiên',
+    tags: [PROJECT_TAGS.layer2, PROJECT_TAGS.gamefi, PROJECT_TAGS.defi, PROJECT_TAGS.onchain]
   },
   {
     id: 'proj-6',
@@ -159,6 +199,7 @@ export const PROJECTS_DATA: ProjectReview[] = [
       'Dự án hoãn ra mắt token hoặc thay đổi tiêu chí phút chót.'
     ],
     onChainMetrics: 'Tỷ lệ ví hợp lệ đạt tiêu chuẩn phân bổ thường chiếm dưới 15%.',
-    author: 'Hoàng Minh Thiên'
+    author: 'Hoàng Minh Thiên',
+    tags: [PROJECT_TAGS.airdrop, PROJECT_TAGS.canhBao, PROJECT_TAGS.layer2]
   }
 ];

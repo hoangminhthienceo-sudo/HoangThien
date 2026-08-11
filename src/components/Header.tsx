@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavTab } from '../types';
-import { Send, Menu, X, BookOpen, Layers, PhoneCall, Home, Sparkles } from 'lucide-react';
+import { useSiteSettings } from '../hooks/useSiteSettings';
+import { Send, Menu, X, BookOpen, Layers, PhoneCall, Home, Sparkles, User } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: NavTab;
@@ -8,10 +9,12 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
+  const { settings } = useSiteSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems: { id: NavTab; label: string; icon: React.ReactNode }[] = [
     { id: 'home', label: 'Trang Chủ', icon: <Home className="w-4 h-4 mr-2" /> },
+    { id: 'about', label: 'Giới Thiệu', icon: <User className="w-4 h-4 mr-2" /> },
     { id: 'courses', label: 'Khoá Học', icon: <BookOpen className="w-4 h-4 mr-2" /> },
     { id: 'projects', label: 'Review Dự Án', icon: <Layers className="w-4 h-4 mr-2" /> },
     { id: 'contact', label: 'Liên Hệ', icon: <PhoneCall className="w-4 h-4 mr-2" /> },
@@ -39,23 +42,24 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
             </div>
             <div className="text-left">
               <span className="text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-[#2563EB] transition-colors block">
-                HOANG<span className="text-[#2563EB]">MINHTHIEN</span>
+                {settings.brand.name}
+                <span className="text-[#2563EB]">{settings.brand.nameAccent}</span>
               </span>
               <span className="text-[11px] font-semibold text-slate-500 tracking-wider uppercase block -mt-1">
-                10 Năm Thực Chiến Tài Chính
+                {settings.brand.tagline}
               </span>
             </div>
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-2 bg-[#F0F7FF] p-1.5 rounded-full border border-[#E0F2FE]">
+          <nav className="hidden md:flex items-center space-x-1 bg-[#F0F7FF] p-1.5 rounded-full border border-[#E0F2FE]">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
+                  className={`flex items-center px-3.5 lg:px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-200 ${
                     isActive
                       ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
                       : 'text-slate-600 hover:text-[#2563EB] hover:bg-white/80'
@@ -71,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
           {/* Telegram Channel CTA */}
           <div className="hidden lg:flex items-center space-x-3">
             <a
-              href="https://t.me/hoangminhthien"
+              href={settings.contact.telegramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:scale-105 transition-all"
@@ -118,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
           })}
           <div className="pt-2">
             <a
-              href="https://t.me/hoangminhthien"
+              href={settings.contact.telegramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center space-x-2 bg-[#2563EB] text-white py-3 rounded-xl font-bold shadow-md hover:bg-[#1D4ED8]"

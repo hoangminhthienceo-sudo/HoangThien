@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { NavTab, ProjectReview } from '../types';
-import { PROJECT_CATEGORIES, PROJECTS_DATA } from '../data/projectsData';
-import { 
-  Search, 
-  Layers, 
+import { PROJECT_CATEGORIES } from '../data/projectsData';
+import { useProjects } from '../hooks/useContent';
+import { collectTags } from '../lib/wordpress';
+import { TagFilter, TagPills } from '../components/TagPills';
+import {
+  Search,
+  Layers,
   ShieldCheck, 
   AlertTriangle, 
   Star, 
@@ -24,20 +27,30 @@ interface ProjectsPageProps {
 
 export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProject, setSelectedProject] = useState<ProjectReview | null>(null);
 
+  // Báo cáo lấy từ WordPress nếu đã cấu hình, ngược lại dùng dữ liệu tĩnh
+  const { items: projects, loading } = useProjects();
+
+  const availableTags = useMemo(() => collectTags(projects), [projects]);
+
   const filteredProjects = useMemo(() => {
-    return PROJECTS_DATA.filter((project) => {
+    const query = searchQuery.toLowerCase();
+    return projects.filter((project) => {
       const matchesCategory =
         selectedCategory === 'all' || project.category === selectedCategory;
+      const matchesTag =
+        selectedTag === null || project.tags.some((tag) => tag.slug === selectedTag);
       const matchesSearch =
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.verdict.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+        project.title.toLowerCase().includes(query) ||
+        project.summary.toLowerCase().includes(query) ||
+        project.verdict.toLowerCase().includes(query) ||
+        project.tags.some((tag) => tag.name.toLowerCase().includes(query));
+      return matchesCategory && matchesTag && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [projects, selectedCategory, selectedTag, searchQuery]);
 
   const activeCategoryObj = PROJECT_CATEGORIES.find((c) => c.id === selectedCategory);
 
@@ -105,7 +118,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
                 Thể Loại Dự Án
               </span>
               <span className="text-[10px] bg-blue-900/80 px-2 py-0.5 rounded text-blue-200">
-                {PROJECTS_DATA.length} Báo cáo
+                {projects.length} Báo cáo
               </span>
             </div>
 
@@ -113,7 +126,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
             <div className="p-2 space-y-1">
               {PROJECT_CATEGORIES.map((category) => {
                 const isActive = selectedCategory === category.id;
-                const count = PROJECTS_DATA.filter(
+                const count = projects.filter(
                   (p) => category.id === 'all' || p.category === category.id
                 ).length;
 
@@ -142,6 +155,9 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
               })}
             </div>
 
+            {/* Lọc theo thẻ — thẻ được gắn cho bài viết bên WordPress */}
+            <TagFilter tags={availableTags} activeSlug={selectedTag} onSelect={setSelectedTag} />
+
             {/* Request Review Widget */}
             <div className="p-4 m-3 rounded-xl bg-gradient-to-br from-[#F0F7FF] to-[#E0F2FE] border border-[#BFDBFE] text-center">
               <PieChart className="w-8 h-8 text-[#2563EB] mx-auto mb-2" />
@@ -165,13 +181,27 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
           {/* RIGHT MAIN CONTENT: Project Cards Grid matching Hình 2 */}
           <main className="lg:col-span-9">
             
-            {filteredProjects.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-[#E0F2FE] overflow-hidden animate-pulse">
+                    <div className="aspect-video bg-slate-100"></div>
+                    <div className="p-5 space-y-3">
+                      <div className="h-3.5 bg-slate-100 rounded w-5/6"></div>
+                      <div className="h-3.5 bg-slate-100 rounded w-2/3"></div>
+                      <div className="h-2.5 bg-slate-100 rounded w-full"></div>
+                      <div className="h-2.5 bg-slate-100 rounded w-4/5"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : filteredProjects.length === 0 ? (
               <div className="bg-white rounded-2xl p-12 text-center border border-[#E0F2FE]">
                 <Layers className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                 <h3 className="text-base font-bold text-slate-800">Không tìm thấy báo cáo review dự án phù hợp</h3>
-                <p className="text-xs text-slate-500 mt-1 mb-4">Vui lòng chọn thể loại khác hoặc thay đổi từ khóa tìm kiếm.</p>
+                <p className="text-xs text-slate-500 mt-1 mb-4">Vui lòng chọn thể loại khác, bỏ lọc thẻ hoặc thay đổi từ khóa tìm kiếm.</p>
                 <button
-                  onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                  onClick={() => { setSelectedCategory('all'); setSelectedTag(null); setSearchQuery(''); }}
                   className="px-4 py-2 bg-[#2563EB] text-white text-xs font-bold rounded-lg"
                 >
                   Xem Tất Cả Review Dự Án
@@ -219,9 +249,17 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
                           {project.title}
                         </h2>
 
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3">
                           {project.summary}
                         </p>
+
+                        {/* Thẻ bài viết — bấm để lọc nhanh */}
+                        <TagPills
+                          tags={project.tags}
+                          activeSlug={selectedTag}
+                          onSelect={(slug) => setSelectedTag(slug === selectedTag ? null : slug)}
+                          max={3}
+                        />
                       </div>
                     </div>
 
@@ -279,9 +317,21 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
               />
             </div>
 
-            <p className="text-sm text-slate-700 leading-relaxed mb-6 font-medium">
+            <p className="text-sm text-slate-700 leading-relaxed mb-4 font-medium">
               {selectedProject.summary}
             </p>
+
+            {/* Thẻ của bài viết */}
+            <TagPills
+              tags={selectedProject.tags}
+              activeSlug={selectedTag}
+              onSelect={(slug) => {
+                setSelectedTag(slug === selectedTag ? null : slug);
+                setSelectedProject(null);
+              }}
+              size="sm"
+              className="mb-6"
+            />
 
             {/* Tokenomics & Key metrics */}
             {selectedProject.tokenomics && (

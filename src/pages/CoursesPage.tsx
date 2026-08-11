@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { NavTab, Course } from '../types';
-import { COURSE_CATEGORIES, COURSES_DATA } from '../data/coursesData';
-import { 
-  Search, 
-  BookOpen, 
+import { COURSE_CATEGORIES } from '../data/coursesData';
+import { useCourses } from '../hooks/useContent';
+import { collectTags } from '../lib/wordpress';
+import { TagFilter, TagPills } from '../components/TagPills';
+import {
+  Search,
+  BookOpen,
   Calendar, 
   Clock, 
   User, 
@@ -23,21 +26,31 @@ interface CoursesPageProps {
 
 export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('nguoi-moi');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
-  // Filter courses by category & search query
+  // Bài viết lấy từ WordPress nếu đã cấu hình, ngược lại dùng dữ liệu tĩnh
+  const { items: courses, loading } = useCourses();
+
+  const availableTags = useMemo(() => collectTags(courses), [courses]);
+
+  // Filter courses by category, tag & search query
   const filteredCourses = useMemo(() => {
-    return COURSES_DATA.filter((course) => {
+    const query = searchQuery.toLowerCase();
+    return courses.filter((course) => {
       const matchesCategory =
         selectedCategory === 'all' || course.category === selectedCategory;
+      const matchesTag =
+        selectedTag === null || course.tags.some((tag) => tag.slug === selectedTag);
       const matchesSearch =
-        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        course.badge.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+        course.title.toLowerCase().includes(query) ||
+        course.description.toLowerCase().includes(query) ||
+        course.badge.toLowerCase().includes(query) ||
+        course.tags.some((tag) => tag.name.toLowerCase().includes(query));
+      return matchesCategory && matchesTag && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [courses, selectedCategory, selectedTag, searchQuery]);
 
   const activeCategoryObj = COURSE_CATEGORIES.find((c) => c.id === selectedCategory);
 
@@ -105,7 +118,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
                 Danh Mục Đào Tạo
               </span>
               <span className="text-[10px] bg-blue-900/80 px-2 py-0.5 rounded text-blue-200">
-                {COURSES_DATA.length} Bài viết
+                {courses.length} Bài viết
               </span>
             </div>
 
@@ -113,7 +126,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
             <div className="p-2 space-y-1">
               {COURSE_CATEGORIES.map((category) => {
                 const isActive = selectedCategory === category.id;
-                const categoryCount = COURSES_DATA.filter(
+                const categoryCount = courses.filter(
                   (c) => category.id === 'all' || c.category === category.id
                 ).length;
 
@@ -142,6 +155,9 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
               })}
             </div>
 
+            {/* Lọc theo thẻ — thẻ được gắn cho bài viết bên WordPress */}
+            <TagFilter tags={availableTags} activeSlug={selectedTag} onSelect={setSelectedTag} />
+
             {/* Telegram Sidebar Widget */}
             <div className="p-4 m-3 rounded-xl bg-gradient-to-br from-[#F0F7FF] to-[#E0F2FE] border border-[#BFDBFE] text-center">
               <GraduationCap className="w-8 h-8 text-[#2563EB] mx-auto mb-2" />
@@ -165,13 +181,27 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
           {/* RIGHT MAIN CONTENT: Cards Grid matching Hình 2 */}
           <main className="lg:col-span-9">
             
-            {filteredCourses.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-[#E0F2FE] overflow-hidden animate-pulse">
+                    <div className="aspect-video bg-slate-100"></div>
+                    <div className="p-5 space-y-3">
+                      <div className="h-3.5 bg-slate-100 rounded w-5/6"></div>
+                      <div className="h-3.5 bg-slate-100 rounded w-2/3"></div>
+                      <div className="h-2.5 bg-slate-100 rounded w-full"></div>
+                      <div className="h-2.5 bg-slate-100 rounded w-4/5"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : filteredCourses.length === 0 ? (
               <div className="bg-white rounded-2xl p-12 text-center border border-[#E0F2FE]">
                 <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                 <h3 className="text-base font-bold text-slate-800">Không tìm thấy bài viết/khóa học phù hợp</h3>
-                <p className="text-xs text-slate-500 mt-1 mb-4">Vui lòng chọn danh mục khác hoặc nhập từ khóa tìm kiếm mới.</p>
+                <p className="text-xs text-slate-500 mt-1 mb-4">Vui lòng chọn danh mục khác, bỏ lọc thẻ hoặc nhập từ khóa tìm kiếm mới.</p>
                 <button
-                  onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                  onClick={() => { setSelectedCategory('all'); setSelectedTag(null); setSearchQuery(''); }}
                   className="px-4 py-2 bg-[#2563EB] text-white text-xs font-bold rounded-lg"
                 >
                   Xem Tất Cả Khóa Học
@@ -221,9 +251,17 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
                           </span>
                         </div>
 
-                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-3">
                           {course.description}
                         </p>
+
+                        {/* Thẻ bài viết — bấm để lọc nhanh */}
+                        <TagPills
+                          tags={course.tags}
+                          activeSlug={selectedTag}
+                          onSelect={(slug) => setSelectedTag(slug === selectedTag ? null : slug)}
+                          max={3}
+                        />
                       </div>
                     </div>
 
@@ -282,9 +320,21 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
               />
             </div>
 
-            <p className="text-sm text-slate-700 leading-relaxed mb-6">
+            <p className="text-sm text-slate-700 leading-relaxed mb-4">
               {selectedCourse.description}
             </p>
+
+            {/* Thẻ của bài viết */}
+            <TagPills
+              tags={selectedCourse.tags}
+              activeSlug={selectedTag}
+              onSelect={(slug) => {
+                setSelectedTag(slug === selectedTag ? null : slug);
+                setSelectedCourse(null);
+              }}
+              size="sm"
+              className="mb-6"
+            />
 
             {/* Info Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 rounded-2xl bg-[#F0F7FF] border border-[#E0F2FE] mb-6 text-xs">

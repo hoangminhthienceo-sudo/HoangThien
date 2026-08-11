@@ -1,4 +1,22 @@
-import { Course } from '../types';
+import { Course, PostTag } from '../types';
+
+/** Thẻ dùng cho dữ liệu tĩnh. Khi bật WordPress, thẻ lấy trực tiếp từ WP Admin. */
+const COURSE_TAGS = {
+  baoMat: { id: 201, slug: 'bao-mat', name: 'Bảo mật' },
+  scam: { id: 202, slug: 'scam', name: 'Scam' },
+  nguoiMoi: { id: 203, slug: 'nguoi-moi', name: 'Người mới' },
+  congDong: { id: 204, slug: 'cong-dong', name: 'Cộng đồng' },
+  telegram: { id: 205, slug: 'telegram', name: 'Telegram' },
+  tieuSu: { id: 206, slug: 'tieu-su', name: 'Tiểu sử' },
+  tuDuy: { id: 207, slug: 'tu-duy-dau-tu', name: 'Tư duy đầu tư' },
+  viMo: { id: 208, slug: 'vi-mo', name: 'Vĩ mô' },
+  thamDinh: { id: 209, slug: 'tham-dinh-du-an', name: 'Thẩm định dự án' },
+  vc: { id: 210, slug: 'quy-dau-tu', name: 'Quỹ đầu tư' },
+  onchain: { id: 211, slug: 'onchain', name: 'On-chain' },
+  dongTien: { id: 212, slug: 'dong-tien', name: 'Dòng tiền' },
+  phanTichKyThuat: { id: 213, slug: 'phan-tich-ky-thuat', name: 'Phân tích kỹ thuật' },
+  quanTriVon: { id: 214, slug: 'quan-tri-von', name: 'Quản trị vốn' },
+} satisfies Record<string, PostTag>;
 
 export const COURSE_CATEGORIES = [
   { id: 'all', label: 'Tất cả' },
@@ -37,6 +55,7 @@ export const COURSES_DATA: Course[] = [
       'Kiểm tra Smart Contract phòng tránh bẫy Rugpull & Honeypot',
       'Quy trình khôi phục và bảo vệ tài khoản khẩn cấp'
     ],
+    tags: [COURSE_TAGS.baoMat, COURSE_TAGS.scam, COURSE_TAGS.nguoiMoi],
     isFeatured: true,
   },
   {
@@ -59,7 +78,8 @@ export const COURSES_DATA: Course[] = [
       'Quy định văn hóa và chia sẻ tín hiệu trong nhóm Telegram',
       'Cách nhận thông báo khẩn cấp khi thị trường biến động mạnh',
       'Quyền lợi thành viên Premium & các buổi offline hàng tháng'
-    ]
+    ],
+    tags: [COURSE_TAGS.congDong, COURSE_TAGS.telegram, COURSE_TAGS.nguoiMoi]
   },
   {
     id: 'course-3',
@@ -81,7 +101,8 @@ export const COURSES_DATA: Course[] = [
       'Những thất bại xương máu và bài học quản trị cảm xúc',
       'Xây dựng triết lý đầu tư bền vững: Bảo vệ vốn trước lợi nhuận',
       'Định hướng chiến lược tài chính cá nhân cho thập kỷ mới'
-    ]
+    ],
+    tags: [COURSE_TAGS.tieuSu, COURSE_TAGS.tuDuy, COURSE_TAGS.congDong]
   },
   {
     id: 'course-4',
@@ -103,7 +124,8 @@ export const COURSES_DATA: Course[] = [
       'Cách thẩm định đội ngũ Founder, Whitepaper và Tokenomics',
       'Đánh giá vòng gọi vốn (Seed, Private, Strategic, Public)',
       'Thực hành lập bảng điểm đánh giá dự án thực tế'
-    ]
+    ],
+    tags: [COURSE_TAGS.viMo, COURSE_TAGS.thamDinh, COURSE_TAGS.tuDuy]
   },
   {
     id: 'course-5',
@@ -125,7 +147,8 @@ export const COURSES_DATA: Course[] = [
       'Danh mục đầu tư trọng điểm (Portfolio Breakdown)',
       'So sánh chiến lược đầu tư của Coinbase vs Binance Labs',
       'Cách săn các kèo chưa ra token từ portfolio của quỹ Tier-1'
-    ]
+    ],
+    tags: [COURSE_TAGS.vc, COURSE_TAGS.thamDinh, COURSE_TAGS.dongTien]
   },
   {
     id: 'course-6',
@@ -147,7 +170,8 @@ export const COURSES_DATA: Course[] = [
       'Khảo sát các luận điểm đầu tư nổi bật (Crypto State Report)',
       'Dự đoán xu hướng công nghệ tiếp theo được a16z rót vốn',
       'Bài học áp dụng cho quy trình chọn mã cổ phiếu/token cá nhân'
-    ]
+    ],
+    tags: [COURSE_TAGS.vc, COURSE_TAGS.viMo, COURSE_TAGS.tuDuy]
   },
   {
     id: 'course-7',
@@ -169,7 +193,8 @@ export const COURSES_DATA: Course[] = [
       'Lập Dashboard theo dõi ví Cá Voi trên Dune Analytics',
       'Nhận biết tín hiệu gom hàng & xả hàng của nhà lập quy',
       'Kết hợp dữ liệu On-chain với khung kỹ thuật HTF'
-    ]
+    ],
+    tags: [COURSE_TAGS.onchain, COURSE_TAGS.dongTien, COURSE_TAGS.viMo]
   },
   {
     id: 'course-8',
@@ -191,6 +216,7 @@ export const COURSES_DATA: Course[] = [
       'Sử dụng Fibonacci Retracement xác định vùng tích lũy',
       'Chiến lược đi vốn 3 phần phòng tránh FOMO',
       'Nhật ký giao dịch và kỷ luật cắt lỗ tự động'
-    ]
+    ],
+    tags: [COURSE_TAGS.phanTichKyThuat, COURSE_TAGS.quanTriVon, COURSE_TAGS.tuDuy]
   }
 ];

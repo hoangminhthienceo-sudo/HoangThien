@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Cấu hình Claude Code riêng của từng máy
+.claude/settings.local.json
