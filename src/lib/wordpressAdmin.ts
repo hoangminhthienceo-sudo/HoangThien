@@ -19,11 +19,52 @@ export interface WPCredentials {
   appPassword: string;
 }
 
+/**
+ * Quyền của người đăng nhập, suy ra từ capabilities của WordPress.
+ *
+ * QUAN TRỌNG: đây chỉ dùng để ẩn/hiện giao diện cho gọn. Việc chặn thật nằm ở
+ * WordPress — REST API tự từ chối mọi thao tác vượt quyền, kể cả khi có ai đó
+ * sửa giao diện trong trình duyệt.
+ */
+export interface WPPermissions {
+  /** Sửa được nội dung chữ & link của website (chỉ Quản trị viên) */
+  canEditSiteContent: boolean;
+  /** Viết và sửa bài */
+  canWritePosts: boolean;
+  /** Tự đăng bài công khai (Cộng tác viên không có quyền này) */
+  canPublish: boolean;
+  /** Tải ảnh lên thư viện */
+  canUploadFiles: boolean;
+  /** Xoá bài của người khác */
+  canDeleteOthersPosts: boolean;
+}
+
+export type WPRoleLabel = 'Quản trị viên' | 'Nhân viên' | 'Không đủ quyền';
+
 export interface WPUser {
   id: number;
   name: string;
   capabilities: string[];
+  permissions: WPPermissions;
+  roleLabel: WPRoleLabel;
 }
+
+const derivePermissions = (capabilities: string[]): WPPermissions => {
+  const has = (cap: string) => capabilities.includes(cap);
+  return {
+    canEditSiteContent: has('manage_options'),
+    canWritePosts: has('edit_posts'),
+    canPublish: has('publish_posts'),
+    canUploadFiles: has('upload_files'),
+    canDeleteOthersPosts: has('delete_others_posts'),
+  };
+};
+
+const deriveRoleLabel = (permissions: WPPermissions): WPRoleLabel => {
+  if (permissions.canEditSiteContent) return 'Quản trị viên';
+  if (permissions.canWritePosts) return 'Nhân viên';
+  return 'Không đủ quyền';
+};
 
 // ---------------------------------------------------------------------------
 // Quản lý phiên đăng nhập
@@ -114,10 +155,22 @@ export const verifyCredentials = async (credentials: WPCredentials): Promise<WPU
     credentials,
     '/wp/v2/users/me?context=edit'
   );
+
+  const capabilities = Object.keys(user.capabilities ?? {}).filter((c) => user.capabilities?.[c]);
+  const permissions = derivePermissions(capabilities);
+
+  if (!permissions.canWritePosts && !permissions.canEditSiteContent) {
+    throw new Error(
+      'Tài khoản này không có quyền viết bài. Nhờ quản trị viên đổi vai trò sang Tác giả hoặc cao hơn.'
+    );
+  }
+
   return {
     id: user.id,
     name: user.name,
-    capabilities: Object.keys(user.capabilities ?? {}).filter((c) => user.capabilities?.[c]),
+    capabilities,
+    permissions,
+    roleLabel: deriveRoleLabel(permissions),
   };
 };
 

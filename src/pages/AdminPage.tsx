@@ -30,10 +30,18 @@ import { PostsTab } from '../components/admin/PostsTab';
 
 type AdminTab = 'content' | 'links' | 'posts';
 
-const TABS: { id: AdminTab; label: string; icon: React.ReactNode }[] = [
-  { id: 'content', label: 'Nội dung trang', icon: <Type className="w-4 h-4" /> },
-  { id: 'links', label: 'Liên kết', icon: <Link2 className="w-4 h-4" /> },
-  { id: 'posts', label: 'Bài viết', icon: <FileText className="w-4 h-4" /> },
+interface TabDef {
+  id: AdminTab;
+  label: string;
+  icon: React.ReactNode;
+  /** Tab chỉ dành cho Quản trị viên */
+  adminOnly: boolean;
+}
+
+const TABS: TabDef[] = [
+  { id: 'content', label: 'Nội dung trang', icon: <Type className="w-4 h-4" />, adminOnly: true },
+  { id: 'links', label: 'Liên kết', icon: <Link2 className="w-4 h-4" />, adminOnly: true },
+  { id: 'posts', label: 'Bài viết', icon: <FileText className="w-4 h-4" />, adminOnly: false },
 ];
 
 /** Tải cài đặt hiện tại về máy dạng JSON — dùng khi chưa có WordPress */
@@ -59,13 +67,22 @@ export const AdminPage: React.FC = () => {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loggingIn, setLoggingIn] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<AdminTab>('content');
+  const [activeTab, setActiveTab] = useState<AdminTab>('posts');
   const [draft, setDraft] = useState<SiteSettings>(settings);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<{ type: 'ok' | 'error'; text: string } | null>(null);
 
   // Đồng bộ bản nháp khi settings từ WordPress tải xong
   useEffect(() => setDraft(settings), [settings]);
+
+  const isAdmin = user?.permissions.canEditSiteContent ?? false;
+  const visibleTabs = TABS.filter((tab) => isAdmin || !tab.adminOnly);
+
+  // Quản trị viên vào thẳng tab Nội dung; nhân viên chỉ có tab Bài viết
+  useEffect(() => {
+    if (!user) return;
+    setActiveTab(isAdmin ? 'content' : 'posts');
+  }, [user, isAdmin]);
 
   // Kiểm tra phiên đăng nhập đã lưu còn dùng được không
   useEffect(() => {
@@ -265,8 +282,18 @@ export const AdminPage: React.FC = () => {
         <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm p-5 sm:p-6 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-extrabold text-slate-900">Bảng quản trị nội dung</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Đăng nhập với <strong className="text-slate-700">{user.name}</strong> · {WP_BASE_URL}
+            <p className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <span>
+                Đăng nhập với <strong className="text-slate-700">{user.name}</strong>
+              </span>
+              <span
+                className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                  isAdmin ? 'bg-[#2563EB] text-white' : 'bg-slate-200 text-slate-700'
+                }`}
+              >
+                {user.roleLabel}
+              </span>
+              <span className="text-slate-400">· {WP_BASE_URL}</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -290,9 +317,13 @@ export const AdminPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex items-center gap-1.5 p-1.5 bg-white rounded-2xl border border-[#E0F2FE] shadow-sm mb-5 overflow-x-auto">
-          {TABS.map((tab) => (
+        {/* Tabs — nhân viên chỉ thấy tab Bài viết */}
+        <div
+          className={`flex items-center gap-1.5 p-1.5 bg-white rounded-2xl border border-[#E0F2FE] shadow-sm mb-5 overflow-x-auto ${
+            visibleTabs.length === 1 ? 'hidden' : ''
+          }`}
+        >
+          {visibleTabs.map((tab) => (
             <button
               key={tab.id}
               type="button"
@@ -327,12 +358,14 @@ export const AdminPage: React.FC = () => {
         )}
 
         {/* Nội dung tab */}
-        {activeTab === 'content' && <ContentTab settings={draft} onChange={setDraft} />}
-        {activeTab === 'links' && <LinksTab settings={draft} onChange={setDraft} />}
-        {activeTab === 'posts' && <PostsTab credentials={credentials} />}
+        {isAdmin && activeTab === 'content' && <ContentTab settings={draft} onChange={setDraft} />}
+        {isAdmin && activeTab === 'links' && <LinksTab settings={draft} onChange={setDraft} />}
+        {activeTab === 'posts' && (
+          <PostsTab credentials={credentials} permissions={user.permissions} />
+        )}
 
-        {/* Thanh lưu cố định — chỉ hiện ở 2 tab chỉnh cài đặt */}
-        {activeTab !== 'posts' && (
+        {/* Thanh lưu cố định — chỉ hiện ở 2 tab chỉnh cài đặt của Quản trị viên */}
+        {isAdmin && activeTab !== 'posts' && (
           <div className="sticky bottom-4 mt-5">
             <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <p className="text-xs text-slate-500">

@@ -18,6 +18,7 @@ import {
   AdminPost,
   PostPayload,
   WPCredentials,
+  WPPermissions,
   WPTermSummary,
   createPost,
   createTag,
@@ -32,6 +33,7 @@ import { WP_COURSES_CATEGORY, WP_PROJECTS_CATEGORY } from '../../lib/wordpress';
 
 interface PostsTabProps {
   credentials: WPCredentials;
+  permissions: WPPermissions;
 }
 
 interface DraftPost {
@@ -84,6 +86,9 @@ const describeVisibility = (
         ? 'trang Review Dự Án'
         : null;
 
+  if (draft.status === 'pending') {
+    return 'Đã gửi bài lên WordPress và đang chờ quản trị viên duyệt. Bài sẽ hiện ngoài site sau khi được duyệt.';
+  }
   if (draft.status !== 'publish') {
     return 'Đã lưu vào WordPress, nhưng bài đang ở trạng thái nháp nên chưa hiện ngoài site. Đổi ô trạng thái sang "Đăng công khai" rồi lưu lại.';
   }
@@ -101,12 +106,15 @@ const STATUS_STYLES: Record<AdminPost['status'], string> = {
   future: 'bg-blue-100 text-blue-700',
 };
 
-export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
+export const PostsTab: React.FC<PostsTabProps> = ({ credentials, permissions }) => {
   const [posts, setPosts] = useState<AdminPost[]>([]);
   const [categories, setCategories] = useState<WPTermSummary[]>([]);
   const [tags, setTags] = useState<WPTermSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Cộng tác viên không tự đăng được, bài của họ phải chờ duyệt
+  const defaultStatus: AdminPost['status'] = permissions.canPublish ? 'publish' : 'pending';
 
   const [draft, setDraft] = useState<DraftPost | null>(null);
   const [saving, setSaving] = useState(false);
@@ -278,9 +286,9 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
               className="px-3 py-2.5 bg-white border border-[#E0F2FE] rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:border-[#2563EB]"
             >
               <option value="draft">Bản nháp</option>
-              <option value="publish">Đăng công khai</option>
+              {permissions.canPublish && <option value="publish">Đăng công khai</option>}
               <option value="pending">Chờ duyệt</option>
-              <option value="private">Riêng tư</option>
+              {permissions.canPublish && <option value="private">Riêng tư</option>}
             </select>
             <button
               type="button"
@@ -372,18 +380,27 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
                 }}
                 className="hidden"
               />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-                className="w-full py-2.5 bg-[#F0F7FF] text-[#2563EB] border border-[#BFDBFE] rounded-xl text-xs font-bold hover:bg-[#E0F2FE] disabled:opacity-60 transition-colors inline-flex items-center justify-center gap-1.5"
-              >
-                {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ImagePlus className="w-3.5 h-3.5" />}
-                {uploading ? 'Đang tải lên…' : 'Chọn ảnh từ máy'}
-              </button>
-              <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                Ảnh ngang tỉ lệ 16:9, tối thiểu 800px chiều ngang.
-              </p>
+              {permissions.canUploadFiles ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="w-full py-2.5 bg-[#F0F7FF] text-[#2563EB] border border-[#BFDBFE] rounded-xl text-xs font-bold hover:bg-[#E0F2FE] disabled:opacity-60 transition-colors inline-flex items-center justify-center gap-1.5"
+                  >
+                    {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ImagePlus className="w-3.5 h-3.5" />}
+                    {uploading ? 'Đang tải lên…' : 'Chọn ảnh từ máy'}
+                  </button>
+                  <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                    Ảnh ngang tỉ lệ 16:9, tối thiểu 800px chiều ngang.
+                  </p>
+                </>
+              ) : (
+                <p className="text-[11px] text-slate-500 leading-relaxed">
+                  Tài khoản của bạn không có quyền tải ảnh lên. Nhờ quản trị viên thêm ảnh giúp,
+                  hoặc đổi vai trò sang Tác giả.
+                </p>
+              )}
             </div>
 
             {/* Danh mục */}
@@ -528,7 +545,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials }) => {
             type="button"
             onClick={() => {
               setNotice(null);
-              setDraft({ ...EMPTY_DRAFT });
+              setDraft({ ...EMPTY_DRAFT, status: defaultStatus });
             }}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#2563EB] text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 hover:bg-[#1D4ED8] transition-all"
           >
