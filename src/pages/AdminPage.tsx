@@ -10,6 +10,7 @@ import {
   Lock,
   RotateCcw,
   Save,
+  ShieldCheck,
   Type,
 } from 'lucide-react';
 import { DEFAULT_SITE_SETTINGS, SiteSettings } from '../data/siteSettings';
@@ -75,13 +76,21 @@ export const AdminPage: React.FC = () => {
   // Đồng bộ bản nháp khi settings từ WordPress tải xong
   useEffect(() => setDraft(settings), [settings]);
 
-  const isAdmin = user?.permissions.canEditSiteContent ?? false;
+  // Dùng ?. cả ở permissions: nếu vì lý do nào đó user còn ở dạng cũ (thiếu
+  // permissions) thì coi như KHÔNG phải quản trị viên, không được đọc thành true.
+  const isAdmin = user?.permissions?.canEditSiteContent === true;
   const visibleTabs = TABS.filter((tab) => isAdmin || !tab.adminOnly);
 
-  // Quản trị viên vào thẳng tab Nội dung; nhân viên chỉ có tab Bài viết
+  /**
+   * Tab thực sự được hiển thị. Không phải quản trị viên thì luôn là 'posts',
+   * bất kể activeTab đang giữ giá trị gì — kể cả khi vừa đăng xuất tài khoản
+   * quản trị rồi đăng nhập lại bằng tài khoản nhân viên trong cùng phiên.
+   */
+  const effectiveTab: AdminTab = isAdmin ? activeTab : 'posts';
+
+  // Quản trị viên vào thẳng tab Nội dung
   useEffect(() => {
-    if (!user) return;
-    setActiveTab(isAdmin ? 'content' : 'posts');
+    if (user && isAdmin) setActiveTab('content');
   }, [user, isAdmin]);
 
   // Kiểm tra phiên đăng nhập đã lưu còn dùng được không
@@ -206,9 +215,23 @@ export const AdminPage: React.FC = () => {
           </div>
 
           {checkingSession ? (
-            <div className="flex items-center justify-center py-8 text-slate-500 gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="text-sm">Đang kiểm tra phiên đăng nhập…</span>
+            <div className="flex flex-col items-center justify-center py-8 text-slate-500 gap-3">
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="text-sm">Đang khôi phục phiên đăng nhập trước đó…</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  clearCredentials();
+                  setCredentials(null);
+                  setUser(null);
+                  setCheckingSession(false);
+                }}
+                className="text-xs font-bold text-[#2563EB] hover:underline"
+              >
+                Đăng nhập bằng tài khoản khác
+              </button>
             </div>
           ) : (
             <form onSubmit={handleLogin} className="space-y-4">
@@ -309,6 +332,7 @@ export const AdminPage: React.FC = () => {
             <button
               type="button"
               onClick={handleLogout}
+              title="Đăng xuất để đổi sang tài khoản khác"
               className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white border border-[#E0F2FE] text-slate-700 rounded-xl text-sm font-bold hover:border-red-300 hover:text-red-600 transition-colors"
             >
               <LogOut className="w-4 h-4" />
@@ -329,7 +353,7 @@ export const AdminPage: React.FC = () => {
               type="button"
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${
-                activeTab === tab.id
+                effectiveTab === tab.id
                   ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
                   : 'text-slate-600 hover:bg-[#F0F7FF] hover:text-[#2563EB]'
               }`}
@@ -339,6 +363,17 @@ export const AdminPage: React.FC = () => {
             </button>
           ))}
         </div>
+
+        {/* Nhân viên: nói rõ phạm vi quyền để khỏi thắc mắc vì sao thiếu mục */}
+        {!isAdmin && (
+          <div className="px-4 py-3 rounded-xl mb-5 bg-[#F0F7FF] border border-[#BFDBFE] text-sm text-slate-700 flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-[#2563EB]" />
+            <span>
+              Bạn đang đăng nhập với quyền <strong>Nhân viên</strong> nên chỉ viết và sửa bài viết.
+              Phần nội dung trang và liên kết do quản trị viên phụ trách.
+            </span>
+          </div>
+        )}
 
         {notice && (
           <div
@@ -358,14 +393,14 @@ export const AdminPage: React.FC = () => {
         )}
 
         {/* Nội dung tab */}
-        {isAdmin && activeTab === 'content' && <ContentTab settings={draft} onChange={setDraft} />}
-        {isAdmin && activeTab === 'links' && <LinksTab settings={draft} onChange={setDraft} />}
-        {activeTab === 'posts' && (
+        {isAdmin && effectiveTab === 'content' && <ContentTab settings={draft} onChange={setDraft} />}
+        {isAdmin && effectiveTab === 'links' && <LinksTab settings={draft} onChange={setDraft} />}
+        {effectiveTab === 'posts' && (
           <PostsTab credentials={credentials} permissions={user.permissions} />
         )}
 
         {/* Thanh lưu cố định — chỉ hiện ở 2 tab chỉnh cài đặt của Quản trị viên */}
-        {isAdmin && activeTab !== 'posts' && (
+        {isAdmin && effectiveTab !== 'posts' && (
           <div className="sticky bottom-4 mt-5">
             <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <p className="text-xs text-slate-500">
