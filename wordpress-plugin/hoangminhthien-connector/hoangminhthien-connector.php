@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HoangMinhThien Connector
  * Description: Kết nối WordPress với website hoangminhthien.com. Cài xong vào Cài đặt → HoangMinhThien để điền địa chỉ website.
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: HoangMinhThien
  * Text Domain: hmt-connector
  */
@@ -40,12 +40,32 @@ add_action('init', function () {
 /* =========================================================================
  * 2. Endpoint lưu nội dung chữ & link của website
  * ====================================================================== */
+
+/**
+ * Cấm mọi tầng cache đụng vào endpoint này.
+ *
+ * Hosting dùng LiteSpeed (Hostinger chẳng hạn) mặc định cache endpoint này tới
+ * 7 ngày. Hậu quả: sửa nội dung xong website cả tuần không đổi, và bản cache
+ * còn bị thiếu header CORS khiến trang quản trị không lưu được gì.
+ */
+function hmt_no_cache() {
+    nocache_headers();
+    header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0', true);
+    header('X-LiteSpeed-Cache-Control: no-cache', true);
+    header_remove('Expires');
+    header_remove('Etag');
+
+    // API chính thức của plugin LiteSpeed Cache, không cài thì hook này vô hại
+    do_action('litespeed_control_set_nocache', 'HoangMinhThien Connector API');
+}
+
 add_action('rest_api_init', function () {
     register_rest_route('hmt/v1', '/settings', [
         [
             'methods'             => 'GET',
             'permission_callback' => '__return_true',
             'callback'            => function () {
+                hmt_no_cache();
                 return rest_ensure_response(get_option(HMT_OPTION_SETTINGS, new stdClass()));
             },
         ],
@@ -57,11 +77,16 @@ add_action('rest_api_init', function () {
                 return current_user_can('manage_options');
             },
             'callback'            => function (WP_REST_Request $request) {
+                hmt_no_cache();
                 $data = $request->get_json_params();
                 if (!is_array($data)) {
                     return new WP_Error('hmt_invalid', 'Dữ liệu không hợp lệ', ['status' => 400]);
                 }
                 update_option(HMT_OPTION_SETTINGS, $data);
+
+                // Xoá cache toàn site để nội dung mới hiện ra ngay
+                do_action('litespeed_purge_all');
+
                 return rest_ensure_response(['saved' => true]);
             },
         ],
@@ -89,6 +114,13 @@ function hmt_send_cors_headers() {
 }
 
 add_action('rest_api_init', function () {
+    // Chưa khai báo địa chỉ website thì GIỮ NGUYÊN cách xử lý mặc định của
+    // WordPress. Nếu gỡ bỏ nó mà không thay bằng gì, website sẽ không đọc được
+    // bài nào — hỏng nặng hơn cả khi chưa cài plugin.
+    if (hmt_allowed_origin() === '') {
+        return;
+    }
+
     remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
     add_filter('rest_pre_serve_request', function ($value) {
         hmt_send_cors_headers();
@@ -101,10 +133,16 @@ add_action('init', function () {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'OPTIONS') {
         return;
     }
+    if (hmt_allowed_origin() === '') {
+        return;
+    }
     if (strpos($_SERVER['REQUEST_URI'] ?? '', '/wp-json/') === false
         && strpos($_SERVER['REQUEST_URI'] ?? '', 'rest_route') === false) {
         return;
     }
+    // Không cho cache câu trả lời preflight — bản cache thiếu header CORS sẽ
+    // khiến trình duyệt chặn mọi thao tác ghi.
+    hmt_no_cache();
     hmt_send_cors_headers();
     status_header(200);
     exit;
@@ -160,12 +198,13 @@ function hmt_health_checks() {
         'fix'   => 'Vào Cài đặt → Đường dẫn tĩnh, chọn "Tên bài viết", bấm Lưu thay đổi.',
     ];
 
-    // Địa chỉ website đã điền chưa
+    // Địa chỉ website đã điền chưa — thiếu là website không lấy được bài
     $origin_ok = hmt_allowed_origin() !== '';
     $checks[] = [
         'label' => 'Địa chỉ website đã khai báo',
         'ok'    => $origin_ok,
-        'fix'   => 'Điền địa chỉ website vào ô bên dưới rồi bấm Lưu.',
+        'fix'   => 'BẮT BUỘC — thiếu ô này thì website không lấy được bài viết nào. '
+                 . 'Điền địa chỉ website vào ô bên dưới rồi bấm Lưu.',
     ];
 
     // 2 danh mục gốc
