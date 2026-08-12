@@ -1,7 +1,8 @@
 import React from 'react';
-import { NavTab } from '../types';
+import { Link } from 'react-router-dom';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { EventGallery } from '../components/EventGallery';
+import { ROUTES } from '../lib/routes';
 import {
   Award,
   Users,
@@ -14,10 +15,6 @@ import {
   ArrowRight,
   Quote,
 } from 'lucide-react';
-
-interface AboutPageProps {
-  setActiveTab: (tab: NavTab) => void;
-}
 
 /** Màu & icon cho các ô thành tựu, theo thứ tự hiển thị */
 const ACHIEVEMENT_STYLES = [
@@ -34,7 +31,7 @@ const PILLAR_STYLES = [
   { color: 'text-indigo-600', node: <Users className="w-5 h-5 mr-2" /> },
 ];
 
-export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
+export const AboutPage: React.FC = () => {
   const { settings } = useSiteSettings();
   const { aboutPage, achievements, hero, homeAbout, contact } = settings;
 
@@ -44,12 +41,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
 
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center space-x-2 text-xs font-bold text-slate-500 mb-6 uppercase tracking-wider">
-          <button
-            onClick={() => setActiveTab('home')}
-            className="hover:text-[#2563EB] transition-colors"
-          >
+          <Link to={ROUTES.home} className="hover:text-[#2563EB] transition-colors">
             TRANG CHỦ
-          </button>
+          </Link>
           <span>&gt;</span>
           <span className="text-[#2563EB] font-extrabold">GIỚI THIỆU</span>
         </nav>
@@ -69,13 +63,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
                 {aboutPage.intro}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mt-8">
-                <button
-                  onClick={() => setActiveTab('courses')}
+                <Link
+                  to={ROUTES.courses}
                   className="px-6 py-3.5 bg-[#2563EB] text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 hover:bg-[#1D4ED8] transition-all flex items-center justify-center space-x-2"
                 >
                   <BookOpen className="w-4 h-4" />
                   <span>{hero.primaryCta}</span>
-                </button>
+                </Link>
                 <a
                   href={contact.telegramUrl}
                   target="_blank"
@@ -205,19 +199,19 @@ export const AboutPage: React.FC<AboutPageProps> = ({ setActiveTab }) => {
             <p className="text-sm text-slate-600 mt-1.5">{aboutPage.closingSubtitle}</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-            <button
-              onClick={() => setActiveTab('courses')}
+            <Link
+              to={ROUTES.courses}
               className="px-6 py-3.5 bg-[#2563EB] text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 hover:bg-[#1D4ED8] transition-all flex items-center justify-center space-x-2"
             >
               <span>Xem Khoá Học</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setActiveTab('contact')}
+            </Link>
+            <Link
+              to={ROUTES.contact}
               className="px-6 py-3.5 bg-[#F0F7FF] text-slate-800 border border-[#E0F2FE] hover:border-[#2563EB] hover:text-[#2563EB] rounded-xl font-bold text-sm transition-all"
             >
               Liên Hệ Cố Vấn
-            </button>
+            </Link>
           </div>
         </div>
 

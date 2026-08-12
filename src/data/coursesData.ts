@@ -1,4 +1,5 @@
 import { Course, PostTag } from '../types';
+import { slugify } from '../lib/routes';
 
 /** Thẻ dùng cho dữ liệu tĩnh. Khi bật WordPress, thẻ lấy trực tiếp từ WP Admin. */
 const COURSE_TAGS = {
@@ -32,7 +33,8 @@ export const COURSE_CATEGORIES = [
   { id: 'tong-hop', label: 'Tổng hợp' },
 ];
 
-export const COURSES_DATA: Course[] = [
+/** Slug sinh tự động từ tiêu đề, khỏi phải gõ tay và luôn khớp với tiêu đề */
+const COURSES_RAW: Omit<Course, 'slug'>[] = [
   {
     id: 'course-1',
     title: '10 dạng scam Crypto phổ biến người mới cần cẩn trọng',
@@ -220,3 +222,8 @@ export const COURSES_DATA: Course[] = [
     tags: [COURSE_TAGS.phanTichKyThuat, COURSE_TAGS.quanTriVon, COURSE_TAGS.tuDuy]
   }
 ];
+
+export const COURSES_DATA: Course[] = COURSES_RAW.map((course) => ({
+  ...course,
+  slug: slugify(course.title),
+}));

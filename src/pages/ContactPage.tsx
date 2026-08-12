@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { NavTab, ContactFormData } from '../types';
+import { Link } from 'react-router-dom';
+import { ContactFormData } from '../types';
+import { ROUTES } from '../lib/routes';
 import { 
   Mail, 
   Phone, 
@@ -15,11 +17,7 @@ import {
   Sparkles
 } from 'lucide-react';
 
-interface ContactPageProps {
-  setActiveTab: (tab: NavTab) => void;
-}
-
-export const ContactPage: React.FC<ContactPageProps> = ({ setActiveTab }) => {
+export const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
     email: '',
@@ -42,12 +40,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ setActiveTab }) => {
         
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center space-x-2 text-xs font-bold text-slate-500 mb-6 uppercase tracking-wider">
-          <button 
-            onClick={() => setActiveTab('home')} 
-            className="hover:text-[#2563EB] transition-colors"
-          >
+          <Link to={ROUTES.home} className="hover:text-[#2563EB] transition-colors">
             TRANG CHỦ
-          </button>
+          </Link>
           <span>&gt;</span>
           <span className="text-[#2563EB] font-extrabold">
             LIÊN HỆ & CỐ VẤN

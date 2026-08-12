@@ -1,3 +1,7 @@
+/**
+ * Định danh trang, dùng để tô đậm mục đang mở trên thanh menu.
+ * Đường dẫn thật nằm ở src/lib/routes.ts.
+ */
 export type NavTab = 'home' | 'about' | 'courses' | 'projects' | 'contact';
 
 /**
@@ -12,6 +16,8 @@ export interface PostTag {
 
 export interface Course {
   id: string;
+  /** Phần đuôi đường dẫn: hoangminhthien.com/khoa-hoc/<slug> */
+  slug: string;
   title: string;
   category: string;
   categoryLabel: string;
@@ -34,6 +40,8 @@ export interface Course {
 
 export interface ProjectReview {
   id: string;
+  /** Phần đuôi đường dẫn: hoangminhthien.com/review-du-an/<slug> */
+  slug: string;
   title: string;
   category: string;
   categoryLabel: string;

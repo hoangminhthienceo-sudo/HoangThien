@@ -1,4 +1,5 @@
 import { PostTag, ProjectReview } from '../types';
+import { slugify } from '../lib/routes';
 
 /** Bảng màu badge theo kết luận thẩm định — dùng chung cho dữ liệu tĩnh & bài từ WordPress */
 export const VERDICT_COLORS: Record<ProjectReview['verdict'], string> = {
@@ -46,7 +47,8 @@ export const PROJECT_CATEGORIES = [
   { id: 'exchanges-vcs', label: 'Sàn Giao Dịch & Quỹ' },
 ];
 
-export const PROJECTS_DATA: ProjectReview[] = [
+/** Slug sinh tu dong tu tieu de */
+const PROJECTS_RAW: Omit<ProjectReview, 'slug'>[] = [
   {
     id: 'proj-1',
     title: 'Arbitrum (ARB): Hệ Sinh Thái Layer-2 Dẫn Đầu TVL & Khả Năng Mở Rộng',
@@ -203,3 +205,8 @@ export const PROJECTS_DATA: ProjectReview[] = [
     tags: [PROJECT_TAGS.airdrop, PROJECT_TAGS.canhBao, PROJECT_TAGS.layer2]
   }
 ];
+
+export const PROJECTS_DATA: ProjectReview[] = PROJECTS_RAW.map((project) => ({
+  ...project,
+  slug: slugify(project.title),
+}));

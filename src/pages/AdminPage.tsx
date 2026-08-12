@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -25,6 +26,7 @@ import {
   saveSiteSettings,
   verifyCredentials,
 } from '../lib/wordpressAdmin';
+import { ROUTES } from '../lib/routes';
 import { ContentTab } from '../components/admin/ContentTab';
 import { LinksTab } from '../components/admin/LinksTab';
 import { PostsTab } from '../components/admin/PostsTab';
@@ -454,16 +456,13 @@ export const AdminPage: React.FC = () => {
         )}
 
         <div className="mt-6 text-center">
-          <button
-            type="button"
-            onClick={() => {
-              reload();
-              window.location.hash = '';
-            }}
+          <Link
+            to={ROUTES.home}
+            onClick={() => reload()}
             className="text-xs font-bold text-slate-500 hover:text-[#2563EB] transition-colors"
           >
             ← Về trang chủ
-          </button>
+          </Link>
         </div>
 
       </div>

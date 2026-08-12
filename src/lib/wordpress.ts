@@ -42,6 +42,7 @@ interface WPTerm {
 interface WPPost {
   id: number;
   date: string;
+  slug: string;
   link: string;
   title: WPRendered;
   excerpt: WPRendered;
@@ -143,6 +144,7 @@ export const mapPostToCourse = (post: WPPost): Course => {
 
   return {
     id: `wp-course-${post.id}`,
+    slug: post.slug,
     title: stripHtml(post.title.rendered),
     category: category.slug,
     categoryLabel: category.label,
@@ -169,6 +171,7 @@ export const mapPostToProject = (post: WPPost): ProjectReview => {
 
   return {
     id: `wp-project-${post.id}`,
+    slug: post.slug,
     title: stripHtml(post.title.rendered),
     category: category.slug,
     categoryLabel: category.label,

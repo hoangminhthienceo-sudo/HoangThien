@@ -1,34 +1,24 @@
 import React, { useState, useMemo } from 'react';
-import { NavTab, Course } from '../types';
+import { Link } from 'react-router-dom';
 import { COURSE_CATEGORIES } from '../data/coursesData';
 import { useCourses } from '../hooks/useContent';
 import { collectTags } from '../lib/wordpress';
 import { TagFilter, TagPills } from '../components/TagPills';
+import { ROUTES, courseUrl } from '../lib/routes';
 import {
   Search,
   BookOpen,
-  Calendar, 
-  Clock, 
-  User, 
-  Star, 
-  CheckCircle2, 
-  ChevronRight, 
-  Send, 
-  X, 
-  GraduationCap, 
+  User,
+  ChevronRight,
+  Send,
+  GraduationCap,
   Filter,
-  Sparkles
 } from 'lucide-react';
 
-interface CoursesPageProps {
-  setActiveTab: (tab: NavTab) => void;
-}
-
-export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
+export const CoursesPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('nguoi-moi');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   // Bài viết lấy từ WordPress nếu đã cấu hình, ngược lại dùng dữ liệu tĩnh
   const { items: courses, loading } = useCourses();
@@ -60,12 +50,9 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
         
         {/* Breadcrumb Navigation matching Hình 2 */}
         <nav className="flex items-center space-x-2 text-xs font-bold text-slate-500 mb-6 uppercase tracking-wider">
-          <button 
-            onClick={() => setActiveTab('home')} 
-            className="hover:text-[#2563EB] transition-colors"
-          >
+          <Link to={ROUTES.home} className="hover:text-[#2563EB] transition-colors">
             TRANG CHỦ
-          </button>
+          </Link>
           <span>&gt;</span>
           <span className="text-[#2563EB] font-extrabold">
             KHÓA HỌC / KHO KIẾN THỨC
@@ -210,10 +197,10 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCourses.map((course) => (
-                  <article
+                  <Link
                     key={course.id}
-                    onClick={() => setSelectedCourse(course)}
-                    className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm hover:shadow-xl hover:border-[#93C5FD] transition-all cursor-pointer flex flex-col justify-between group overflow-hidden"
+                    to={courseUrl(course.slug)}
+                    className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm hover:shadow-xl hover:border-[#93C5FD] transition-all flex flex-col justify-between group overflow-hidden"
                   >
                     <div>
                       {/* Image Thumbnail with Overlay Badge matching Hình 2 graphic overlays */}
@@ -276,7 +263,7 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
                       </span>
                     </div>
 
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}
@@ -286,110 +273,6 @@ export const CoursesPage: React.FC<CoursesPageProps> = ({ setActiveTab }) => {
         </div>
 
       </div>
-
-      {/* Course Detail Modal */}
-      {selectedCourse && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-[#E0F2FE] p-6 sm:p-8 relative">
-            
-            <button
-              onClick={() => setSelectedCourse(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-[#F0F7FF] text-slate-600 hover:bg-slate-200"
-              aria-label="Đóng modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center space-x-2 mb-3">
-              <span className="text-xs font-bold px-3 py-1 rounded bg-[#2563EB] text-white">
-                {selectedCourse.categoryLabel}
-              </span>
-              <span className="text-xs text-slate-500">{selectedCourse.date}</span>
-            </div>
-
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-4 leading-tight">
-              {selectedCourse.title}
-            </h2>
-
-            {/* Banner Preview */}
-            <div className="rounded-2xl overflow-hidden aspect-video mb-6 bg-slate-900">
-              <img
-                src={selectedCourse.thumbnail}
-                alt={selectedCourse.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <p className="text-sm text-slate-700 leading-relaxed mb-4">
-              {selectedCourse.description}
-            </p>
-
-            {/* Thẻ của bài viết */}
-            <TagPills
-              tags={selectedCourse.tags}
-              activeSlug={selectedTag}
-              onSelect={(slug) => {
-                setSelectedTag(slug === selectedTag ? null : slug);
-                setSelectedCourse(null);
-              }}
-              size="sm"
-              className="mb-6"
-            />
-
-            {/* Info Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 rounded-2xl bg-[#F0F7FF] border border-[#E0F2FE] mb-6 text-xs">
-              <div>
-                <span className="text-slate-500 block">Giảng viên</span>
-                <strong className="text-slate-900 text-sm font-bold">{selectedCourse.instructor}</strong>
-              </div>
-              <div>
-                <span className="text-slate-500 block">Thời lượng</span>
-                <strong className="text-slate-900 text-sm font-bold">{selectedCourse.duration} ({selectedCourse.lessonsCount} Bài)</strong>
-              </div>
-              <div>
-                <span className="text-slate-500 block">Trình độ</span>
-                <strong className="text-slate-900 text-sm font-bold">{selectedCourse.level}</strong>
-              </div>
-            </div>
-
-            {/* Curriculum Outline */}
-            <div className="mb-8">
-              <h3 className="text-sm font-extrabold text-slate-900 mb-3 uppercase tracking-wider flex items-center">
-                <BookOpen className="w-4 h-4 text-[#2563EB] mr-2" />
-                Nội dung bài học nổi bật
-              </h3>
-              <ul className="space-y-2.5">
-                {selectedCourse.curriculum.map((item, idx) => (
-                  <li key={idx} className="flex items-start text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <CheckCircle2 className="w-4 h-4 text-[#2563EB] mt-0.5 mr-2 shrink-0" />
-                    <span><strong>Bài {idx + 1}:</strong> {item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-[#E0F2FE]">
-              <a
-                href="https://t.me/hoangminhthien"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full sm:w-auto flex-1 py-3.5 bg-[#2563EB] text-white rounded-xl font-bold text-center text-xs shadow-lg shadow-blue-500/20 hover:bg-[#1D4ED8] flex items-center justify-center space-x-2"
-              >
-                <Send className="w-4 h-4" />
-                <span>Đăng Ký Khóa Học Qua Telegram</span>
-              </a>
-              <button
-                onClick={() => setSelectedCourse(null)}
-                className="w-full sm:w-auto px-6 py-3.5 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-200"
-              >
-                Đóng
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
 
     </div>
   );

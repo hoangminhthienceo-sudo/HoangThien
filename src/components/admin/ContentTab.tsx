@@ -239,7 +239,7 @@ export const ContentTab: React.FC<ContentTabProps> = ({
           hint="Ảnh ngang tỉ lệ 16:9, tối thiểu 800px chiều ngang. Nên để 4 ảnh cho vừa một hàng."
           items={settings.gallery}
           onChange={(gallery) => onChange({ ...settings, gallery })}
-          makeEmpty={() => ({ image: '', title: '', caption: '' })}
+          makeEmpty={() => ({ image: '', title: '', caption: '', link: '' })}
           addLabel="Thêm ảnh"
           renderItem={(item, update) => (
             <>
@@ -261,6 +261,17 @@ export const ContentTab: React.FC<ContentTabProps> = ({
                 onChange={(caption) => update({ caption })}
                 placeholder="vd: Chia sẻ góc nhìn kinh tế vĩ mô"
               />
+              <InlineInput
+                label="Bấm vào ảnh thì đi đâu (không bắt buộc)"
+                value={item.link ?? ''}
+                onChange={(link) => update({ link })}
+                placeholder="vd: /khoa-hoc  hoặc  https://facebook.com/..."
+              />
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Bỏ trống thì ảnh không bấm được. Điền đường dẫn bắt đầu bằng <code>/</code> để
+                chuyển sang trang khác trong website, hoặc <code>https://</code> để mở link ngoài
+                trong tab mới.
+              </p>
             </>
           )}
         />

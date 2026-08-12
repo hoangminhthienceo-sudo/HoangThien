@@ -23,6 +23,11 @@ export interface GalleryItem {
   image: string;
   title: string;
   caption: string;
+  /**
+   * Bấm vào ảnh sẽ mở đường dẫn này. Bỏ trống thì ảnh không bấm được.
+   * Link ngoài (https://…) mở tab mới; link nội bộ (/khoa-hoc) chuyển trang tại chỗ.
+   */
+  link?: string;
 }
 
 export interface Milestone {

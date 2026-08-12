@@ -1,35 +1,23 @@
 import React, { useState, useMemo } from 'react';
-import { NavTab, ProjectReview } from '../types';
+import { Link } from 'react-router-dom';
 import { PROJECT_CATEGORIES } from '../data/projectsData';
 import { useProjects } from '../hooks/useContent';
 import { collectTags } from '../lib/wordpress';
 import { TagFilter, TagPills } from '../components/TagPills';
+import { ROUTES, projectUrl } from '../lib/routes';
 import {
   Search,
   Layers,
-  ShieldCheck, 
-  AlertTriangle, 
-  Star, 
-  TrendingUp, 
-  ChevronRight, 
-  Send, 
-  X, 
-  Filter, 
-  PieChart, 
-  Check, 
-  Calendar,
-  Sparkles
+  ChevronRight,
+  Send,
+  Filter,
+  PieChart,
 } from 'lucide-react';
 
-interface ProjectsPageProps {
-  setActiveTab: (tab: NavTab) => void;
-}
-
-export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
+export const ProjectsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedProject, setSelectedProject] = useState<ProjectReview | null>(null);
 
   // Báo cáo lấy từ WordPress nếu đã cấu hình, ngược lại dùng dữ liệu tĩnh
   const { items: projects, loading } = useProjects();
@@ -60,12 +48,9 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
         
         {/* Breadcrumb Navigation matching Hình 2 */}
         <nav className="flex items-center space-x-2 text-xs font-bold text-slate-500 mb-6 uppercase tracking-wider">
-          <button 
-            onClick={() => setActiveTab('home')} 
-            className="hover:text-[#2563EB] transition-colors"
-          >
+          <Link to={ROUTES.home} className="hover:text-[#2563EB] transition-colors">
             TRANG CHỦ
-          </button>
+          </Link>
           <span>&gt;</span>
           <span className="text-[#2563EB] font-extrabold">
             REVIEW DỰ ÁN
@@ -210,10 +195,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProjects.map((project) => (
-                  <article
+                  <Link
                     key={project.id}
-                    onClick={() => setSelectedProject(project)}
-                    className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm hover:shadow-xl hover:border-[#93C5FD] transition-all cursor-pointer flex flex-col justify-between group overflow-hidden"
+                    to={projectUrl(project.slug)}
+                    className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm hover:shadow-xl hover:border-[#93C5FD] transition-all flex flex-col justify-between group overflow-hidden"
                   >
                     <div>
                       {/* Image Thumbnail with Overlay Verdict */}
@@ -273,7 +258,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
                       </span>
                     </div>
 
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}
@@ -283,122 +268,6 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ setActiveTab }) => {
         </div>
 
       </div>
-
-      {/* Project Detail Modal */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-[#E0F2FE] p-6 sm:p-8 relative">
-            
-            <button
-              onClick={() => setSelectedProject(null)}
-              className="absolute top-5 right-5 p-2 rounded-full bg-[#F0F7FF] text-slate-600 hover:bg-slate-200"
-              aria-label="Đóng modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center space-x-2 mb-3">
-              <span className={`text-xs font-bold px-3 py-1 rounded border ${selectedProject.verdictColor}`}>
-                {selectedProject.verdict}
-              </span>
-              <span className="text-xs text-slate-500">{selectedProject.date}</span>
-            </div>
-
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-4 leading-tight">
-              {selectedProject.title}
-            </h2>
-
-            {/* Thumbnail */}
-            <div className="rounded-2xl overflow-hidden aspect-video mb-6 bg-slate-900">
-              <img
-                src={selectedProject.thumbnail}
-                alt={selectedProject.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <p className="text-sm text-slate-700 leading-relaxed mb-4 font-medium">
-              {selectedProject.summary}
-            </p>
-
-            {/* Thẻ của bài viết */}
-            <TagPills
-              tags={selectedProject.tags}
-              activeSlug={selectedTag}
-              onSelect={(slug) => {
-                setSelectedTag(slug === selectedTag ? null : slug);
-                setSelectedProject(null);
-              }}
-              size="sm"
-              className="mb-6"
-            />
-
-            {/* Tokenomics & Key metrics */}
-            {selectedProject.tokenomics && (
-              <div className="p-4 rounded-2xl bg-[#F0F7FF] border border-[#E0F2FE] mb-6">
-                <h3 className="text-xs font-bold uppercase text-[#2563EB] mb-1">
-                  Cấu Trúc Tài Chính & Tokenomics
-                </h3>
-                <p className="text-xs text-slate-700 leading-relaxed">
-                  {selectedProject.tokenomics}
-                </p>
-              </div>
-            )}
-
-            {/* Highlights Pros */}
-            <div className="mb-6">
-              <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider mb-3 flex items-center text-emerald-700">
-                <Check className="w-4 h-4 mr-1 text-emerald-600" />
-                Điểm Nổi Bật & Ưu Điểm Lớn
-              </h3>
-              <ul className="space-y-2 text-xs text-slate-700">
-                {selectedProject.highlights.map((h, i) => (
-                  <li key={i} className="flex items-start bg-emerald-50/60 p-3 rounded-xl border border-emerald-100">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 mr-2 shrink-0"></span>
-                    <span>{h}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Risks */}
-            <div className="mb-8">
-              <h3 className="text-xs font-extrabold text-slate-900 uppercase tracking-wider mb-3 flex items-center text-amber-800">
-                <AlertTriangle className="w-4 h-4 mr-1 text-amber-600" />
-                Rủi Ro Cần Lưu Ý Khi Phân Bổ Vốn
-              </h3>
-              <ul className="space-y-2 text-xs text-slate-700">
-                {selectedProject.risks.map((r, i) => (
-                  <li key={i} className="flex items-start bg-amber-50/60 p-3 rounded-xl border border-amber-100">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 mr-2 shrink-0"></span>
-                    <span>{r}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-[#E0F2FE]">
-              <a
-                href="https://t.me/hoangminhthien"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full sm:w-auto flex-1 py-3.5 bg-[#2563EB] text-white rounded-xl font-bold text-center text-xs shadow-lg shadow-blue-500/20 hover:bg-[#1D4ED8] flex items-center justify-center space-x-2"
-              >
-                <Send className="w-4 h-4" />
-                <span>Thảo Luận Báo Cáo Trên Telegram</span>
-              </a>
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="w-full sm:w-auto px-6 py-3.5 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-200"
-              >
-                Đóng
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
 
     </div>
   );

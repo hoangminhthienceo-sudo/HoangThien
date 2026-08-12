@@ -1,39 +1,29 @@
 import React, { useState } from 'react';
-import { NavTab } from '../types';
+import { Link, NavLink } from 'react-router-dom';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { ROUTES } from '../lib/routes';
 import { Send, Menu, X, BookOpen, Layers, PhoneCall, Home, Sparkles, User } from 'lucide-react';
 
-interface HeaderProps {
-  activeTab: NavTab;
-  setActiveTab: (tab: NavTab) => void;
-}
+const NAV_ITEMS: { to: string; label: string; icon: React.ReactNode }[] = [
+  { to: ROUTES.home, label: 'Trang Chủ', icon: <Home className="w-4 h-4 mr-2" /> },
+  { to: ROUTES.about, label: 'Giới Thiệu', icon: <User className="w-4 h-4 mr-2" /> },
+  { to: ROUTES.courses, label: 'Khoá Học', icon: <BookOpen className="w-4 h-4 mr-2" /> },
+  { to: ROUTES.projects, label: 'Review Dự Án', icon: <Layers className="w-4 h-4 mr-2" /> },
+  { to: ROUTES.contact, label: 'Liên Hệ', icon: <PhoneCall className="w-4 h-4 mr-2" /> },
+];
 
-export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
+export const Header: React.FC = () => {
   const { settings } = useSiteSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const navItems: { id: NavTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'home', label: 'Trang Chủ', icon: <Home className="w-4 h-4 mr-2" /> },
-    { id: 'about', label: 'Giới Thiệu', icon: <User className="w-4 h-4 mr-2" /> },
-    { id: 'courses', label: 'Khoá Học', icon: <BookOpen className="w-4 h-4 mr-2" /> },
-    { id: 'projects', label: 'Review Dự Án', icon: <Layers className="w-4 h-4 mr-2" /> },
-    { id: 'contact', label: 'Liên Hệ', icon: <PhoneCall className="w-4 h-4 mr-2" /> },
-  ];
-
-  const handleNavClick = (tab: NavTab) => {
-    setActiveTab(tab);
-    setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass-nav shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          
+
           {/* Logo Brand */}
-          <button
-            onClick={() => handleNavClick('home')}
+          <Link
+            to={ROUTES.home}
             className="flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-xl p-1"
             aria-label="Về trang chủ HoangMinhThien"
           >
@@ -49,27 +39,27 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 {settings.brand.tagline}
               </span>
             </div>
-          </button>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center space-x-1 bg-[#F0F7FF] p-1.5 rounded-full border border-[#E0F2FE]">
-            {navItems.map((item) => {
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center px-3.5 lg:px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-200 ${
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === ROUTES.home}
+                className={({ isActive }) =>
+                  `flex items-center px-3.5 lg:px-4 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-200 ${
                     isActive
                       ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
                       : 'text-slate-600 hover:text-[#2563EB] hover:bg-white/80'
-                  }`}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+                  }`
+                }
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
           </nav>
 
           {/* Telegram Channel CTA */}
@@ -92,6 +82,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-xl text-slate-700 hover:bg-[#E0F2FE] focus:outline-none"
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6 text-[#2563EB]" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -103,23 +94,24 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-[#E0F2FE] px-4 pt-3 pb-6 space-y-2 shadow-2xl animate-in slide-in-from-top-2 duration-200">
-          {navItems.map((item) => {
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center px-4 py-3 rounded-xl text-base font-bold transition-all ${
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === ROUTES.home}
+              onClick={() => setMobileMenuOpen(false)}
+              className={({ isActive }) =>
+                `w-full flex items-center px-4 py-3 rounded-xl text-base font-bold transition-all ${
                   isActive
                     ? 'bg-[#2563EB] text-white shadow-md'
                     : 'text-slate-700 hover:bg-[#F0F7FF] hover:text-[#2563EB]'
-                }`}
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+                }`
+              }
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
           <div className="pt-2">
             <a
               href={settings.contact.telegramUrl}

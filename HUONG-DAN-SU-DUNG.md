@@ -28,7 +28,7 @@ ngay**. Không phải bấm đăng tải, không phải chờ ai duyệt, không
 | Đăng nhập ở đâu | Dùng mật khẩu nào | Để làm gì |
 | --- | --- | --- |
 | `cms.hoangminhthien.com/wp-admin` | Mật khẩu WordPress thường | Quản lý tài khoản, tạo mật khẩu ứng dụng |
-| `hoangminhthien.com/#admin` | **Mật khẩu ứng dụng** | Viết bài, sửa nội dung — dùng hằng ngày |
+| `hoangminhthien.com/admin` | **Mật khẩu ứng dụng** | Viết bài, sửa nội dung — dùng hằng ngày |
 
 ## Bước 1 — Đăng nhập WordPress
 
@@ -58,7 +58,7 @@ WordPress ở bước 1.
 ## Bước 3 — Vào trang quản trị website
 
 ```
-https://hoangminhthien.com/#admin
+https://hoangminhthien.com/admin
 ```
 
 - **Tên đăng nhập**: giống tên đăng nhập WordPress
@@ -76,7 +76,7 @@ Vào được sẽ thấy tên mình ở góc trên, kèm nhãn **Quản trị v
 
 # Phần 2 — Viết bài
 
-1. Vào `hoangminhthien.com/#admin`, đăng nhập
+1. Vào `hoangminhthien.com/admin`, đăng nhập
 2. Tab **Bài viết** → **Viết bài mới**
 3. Gõ **tiêu đề**
 4. Gõ **nội dung** ở khung soạn thảo
@@ -107,6 +107,23 @@ sẽ hiện ở trang nào.
 
 Nên tích thêm một danh mục chủ đề nữa — đó là nhãn xanh hiển thị trên thẻ bài.
 
+## Đường dẫn của bài viết
+
+Mỗi bài có địa chỉ riêng, chia sẻ được lên Facebook hay Zalo:
+
+| Loại | Địa chỉ |
+| --- | --- |
+| Trang khoá học | `hoangminhthien.com/khoa-hoc` |
+| Một bài khoá học | `hoangminhthien.com/khoa-hoc/ten-bai-viet` |
+| Trang review | `hoangminhthien.com/review-du-an` |
+| Một bài review | `hoangminhthien.com/review-du-an/ten-bai-viet` |
+
+Phần `ten-bai-viet` lấy từ ô **Đường dẫn tĩnh** của bài trong WordPress, tự sinh từ tiêu
+đề. Muốn đổi thì sửa trong WordPress khi soạn bài.
+
+> Đổi đường dẫn của bài đã đăng sẽ làm hỏng các link đã chia sẻ trước đó. Cân nhắc
+> trước khi sửa.
+
 ## Thẻ
 
 Thẻ hiện thành pill dạng `#Phân tích kỹ thuật` trên thẻ bài. Khách bấm vào là lọc ra
@@ -134,7 +151,21 @@ Lỡ sửa hỏng: bấm **Về mặc định** rồi **Lưu lên WordPress**.
 | Ảnh sự kiện & hội thảo | Nội dung trang → Hình ảnh sự kiện | Ngang 16:9, nên để 4 tấm |
 | Ảnh từng bài viết | Bài viết → Ảnh đại diện | Ngang 16:9, rộng từ 800px |
 
-Ảnh sự kiện còn sửa được tiêu đề, chú thích, và thêm bớt số lượng tuỳ ý.
+Ảnh sự kiện còn sửa được tiêu đề, chú thích, thêm bớt số lượng, và **gắn link cho ảnh**.
+
+### Gắn link cho ảnh sự kiện
+
+Ô **Bấm vào ảnh thì đi đâu** nằm ngay dưới mỗi ảnh:
+
+| Điền gì | Khách bấm vào ảnh sẽ |
+| --- | --- |
+| Bỏ trống | Không có gì xảy ra, ảnh chỉ để xem |
+| `/khoa-hoc` | Chuyển sang trang Khoá Học của website |
+| `/review-du-an` | Chuyển sang trang Review Dự Án |
+| `https://facebook.com/...` | Mở link ngoài trong tab mới |
+
+Ảnh có gắn link sẽ hiện một mũi tên nhỏ ở góc trên khi rê chuột vào, để khách biết bấm
+được.
 
 ## Đổi liên kết mạng xã hội
 
@@ -175,8 +206,8 @@ riêng, không dùng chung được.
 
 | Hiện tượng | Cách xử lý |
 | --- | --- |
-| Đăng nhập `#admin` báo sai mật khẩu dù gõ đúng | Đang dùng nhầm mật khẩu WordPress. Phải dùng Mật khẩu ứng dụng |
-| Vào `#admin` thấy sẵn tài khoản người khác | Phiên cũ còn lưu. Bấm Đăng xuất rồi đăng nhập lại |
+| Đăng nhập `/admin` báo sai mật khẩu dù gõ đúng | Đang dùng nhầm mật khẩu WordPress. Phải dùng Mật khẩu ứng dụng |
+| Vào `/admin` thấy sẵn tài khoản người khác | Phiên cũ còn lưu. Bấm Đăng xuất rồi đăng nhập lại |
 | Viết bài xong không thấy trên website | Xem Phần 2 — trạng thái và danh mục |
 | Nhân viên không thấy tab Nội dung trang | Đúng như thiết kế |
 | Sửa chữ xong website vẫn chưa đổi | Kiểm tra đã bấm **Lưu lên WordPress** chưa, hay mới chỉ Xem trước |

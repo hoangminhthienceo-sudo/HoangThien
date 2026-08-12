@@ -1,24 +1,17 @@
 import React from 'react';
-import { NavTab } from '../types';
+import { Link } from 'react-router-dom';
 import { SocialChannel } from '../data/socialLinks';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { ROUTES } from '../lib/routes';
 import { Youtube, Send, Facebook, Twitter, ShieldCheck, Mail, Phone, ExternalLink } from 'lucide-react';
 
-interface FooterProps {
-  setActiveTab: (tab: NavTab) => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
+export const Footer: React.FC = () => {
   const { settings } = useSiteSettings();
   const { brand, contact, footer } = settings;
 
   const socialUrl = (id: SocialChannel['id']) =>
     settings.social.find((channel) => channel.id === id)?.url ?? '#';
 
-  const handleTabNavigate = (tab: NavTab) => {
-    setActiveTab(tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <footer className="bg-[#0F172A] text-white pt-16 pb-12 border-t border-slate-800">
@@ -77,29 +70,29 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-300">
               <li>
-                <button onClick={() => handleTabNavigate('home')} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.home} className="hover:text-blue-400 transition-colors">
                   Trang Chủ
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleTabNavigate('about')} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.about} className="hover:text-blue-400 transition-colors">
                   Giới Thiệu
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleTabNavigate('courses')} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.courses} className="hover:text-blue-400 transition-colors">
                   Khoá Học Thực Chiến
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleTabNavigate('projects')} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.projects} className="hover:text-blue-400 transition-colors">
                   Review Dự Án
-                </button>
+                </Link>
               </li>
               <li>
-                <button onClick={() => handleTabNavigate('contact')} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.contact} className="hover:text-blue-400 transition-colors">
                   Liên Hệ Cố Vấn
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -111,24 +104,24 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-300">
               <li>
-                <a href="#privacy" onClick={(e) => { e.preventDefault(); handleTabNavigate('contact'); }} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.contact} className="hover:text-blue-400 transition-colors">
                   Chính sách bảo mật
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#cookies" onClick={(e) => { e.preventDefault(); handleTabNavigate('contact'); }} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.contact} className="hover:text-blue-400 transition-colors">
                   Chính sách cookies
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#terms" onClick={(e) => { e.preventDefault(); handleTabNavigate('contact'); }} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.contact} className="hover:text-blue-400 transition-colors">
                   Điều khoản sử dụng
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#disclaimer" onClick={(e) => { e.preventDefault(); handleTabNavigate('contact'); }} className="hover:text-blue-400 transition-colors">
+                <Link to={ROUTES.contact} className="hover:text-blue-400 transition-colors">
                   Miễn trừ trách nhiệm
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

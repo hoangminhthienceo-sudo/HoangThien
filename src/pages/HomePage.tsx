@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { NavTab } from '../types';
+import { Link } from 'react-router-dom';
 import { useCourses, useProjects } from '../hooks/useContent';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { TagPills } from '../components/TagPills';
 import { EventGallery } from '../components/EventGallery';
+import { ROUTES, courseUrl, projectUrl } from '../lib/routes';
 import { SocialChannel } from '../data/socialLinks';
 import {
   ArrowRight,
@@ -18,10 +19,6 @@ import {
   ChevronRight,
   ExternalLink,
 } from 'lucide-react';
-
-interface HomePageProps {
-  setActiveTab: (tab: NavTab) => void;
-}
 
 /** Màu hover riêng cho từng kênh trên thanh badge Hero */
 const CHANNEL_BADGE_STYLES: Record<SocialChannel['id'], string> = {
@@ -77,7 +74,7 @@ const PILLAR_STYLES = [
 
 type StatsState = Record<string, number>;
 
-export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
+export const HomePage: React.FC = () => {
   const { settings } = useSiteSettings();
   const { hero, homeAbout, achievements, mediaProof, coursesPreview, projectsPreview, social, contact } =
     settings;
@@ -147,14 +144,14 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
-                <button
-                  onClick={() => setActiveTab('courses')}
+                <Link
+                  to={ROUTES.courses}
                   className="w-full sm:w-auto px-8 py-4 bg-[#2563EB] text-white rounded-xl font-bold shadow-xl shadow-blue-500/25 hover:bg-[#1D4ED8] hover:shadow-blue-500/40 transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center space-x-2"
                 >
                   <BookOpen className="w-5 h-5" />
                   <span>{hero.primaryCta}</span>
                   <ArrowRight className="w-4 h-4 ml-1" />
-                </button>
+                </Link>
                 <a
                   href={contact.telegramUrl}
                   target="_blank"
@@ -231,12 +228,12 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
               {homeAbout.eyebrow}
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-4">
-              <button
-                onClick={() => setActiveTab('about')}
+              <Link
+                to={ROUTES.about}
                 className="hover:text-[#2563EB] transition-colors focus:outline-none focus:ring-2 focus:ring-[#93C5FD] rounded-lg"
               >
                 {homeAbout.title}
-              </button>
+              </Link>
             </h2>
             <div className="w-20 h-1 bg-[#2563EB] mx-auto rounded-full"></div>
           </div>
@@ -244,17 +241,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
 
             {/* Story copy — toàn khối click được để sang trang Giới Thiệu */}
-            <div
-              role="link"
-              tabIndex={0}
-              onClick={() => setActiveTab('about')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setActiveTab('about');
-                }
-              }}
-              className="lg:col-span-6 space-y-6 cursor-pointer group rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#93C5FD]"
+            <Link
+              to={ROUTES.about}
+              className="lg:col-span-6 space-y-6 block group rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#93C5FD]"
             >
               <h3 className="text-2xl font-bold text-slate-900 leading-snug group-hover:text-[#2563EB] transition-colors">
                 {homeAbout.quote}
@@ -285,7 +274,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                 <span>{homeAbout.ctaLabel}</span>
                 <ArrowRight className="w-4 h-4" />
               </span>
-            </div>
+            </Link>
 
             {/* Achievements Cards Grid */}
             <div className="lg:col-span-6">
@@ -320,13 +309,13 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                 <p className="text-sm text-slate-500">{homeAbout.gallerySubtitle}</p>
               </div>
 
-              <button
-                onClick={() => setActiveTab('about')}
+              <Link
+                to={ROUTES.about}
                 className="mt-6 md:mt-0 inline-flex items-center space-x-2 text-[#2563EB] font-extrabold hover:text-[#1D4ED8] transition-colors"
               >
                 <span>{homeAbout.galleryCtaLabel}</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
 
             <EventGallery items={settings.gallery} />
@@ -396,20 +385,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
               <p className="text-slate-600 text-sm mt-2">{coursesPreview.subtitle}</p>
             </div>
 
-            <button
-              onClick={() => setActiveTab('courses')}
+            <Link
+              to={ROUTES.courses}
               className="mt-6 md:mt-0 inline-flex items-center space-x-2 text-[#2563EB] font-extrabold hover:text-[#1D4ED8] transition-colors"
             >
               <span>{coursesPreview.ctaLabel}</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {courses.slice(0, 4).map((course) => (
-              <article
+              <Link
                 key={course.id}
-                onClick={() => setActiveTab('courses')}
+                to={courseUrl(course.slug)}
                 className="h-full bg-white rounded-2xl border border-[#E0F2FE] shadow-sm hover:shadow-xl hover:border-[#93C5FD] transition-all cursor-pointer flex flex-col group overflow-hidden"
               >
                 <div className="relative aspect-video overflow-hidden bg-slate-900 shrink-0">
@@ -453,7 +442,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                     </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 
@@ -475,20 +464,20 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
               <p className="text-slate-600 text-sm mt-2">{projectsPreview.subtitle}</p>
             </div>
 
-            <button
-              onClick={() => setActiveTab('projects')}
+            <Link
+              to={ROUTES.projects}
               className="mt-6 md:mt-0 inline-flex items-center space-x-2 text-[#2563EB] font-extrabold hover:text-[#1D4ED8] transition-colors"
             >
               <span>{projectsPreview.ctaLabel}</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {projects.slice(0, 4).map((project) => (
-              <article
+              <Link
                 key={project.id}
-                onClick={() => setActiveTab('projects')}
+                to={projectUrl(project.slug)}
                 className="h-full bg-white rounded-2xl border border-[#E0F2FE] shadow-sm hover:shadow-xl hover:border-[#93C5FD] transition-all cursor-pointer flex flex-col group overflow-hidden"
               >
                 <div className="relative aspect-video overflow-hidden bg-slate-900 shrink-0">
@@ -532,7 +521,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTab }) => {
                     </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
 
