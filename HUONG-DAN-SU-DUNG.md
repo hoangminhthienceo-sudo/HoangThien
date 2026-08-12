@@ -1,366 +1,233 @@
 # Hướng dẫn sử dụng website HoangMinhThien
 
-Tài liệu này viết cho người không rành kỹ thuật. Cứ làm tuần tự từ trên xuống,
-không bỏ bước nào.
+> **Bản dành cho khách hàng (đọc trên web, in PDF được):**
+> https://claude.ai/code/artifact/8cae5c4b-ce1c-4472-9d5f-67897bccd4ab
+>
+> File này là bản markdown tương đương, kèm thêm phần thông tin kỹ thuật ở cuối
+> dành cho người bảo trì. Hướng dẫn cài đặt lại từ đầu nằm ở [WORDPRESS.md](WORDPRESS.md).
 
-**Đọc trước 30 giây để hiểu hệ thống:**
+Hệ thống đã cài đặt và chạy xong. Tài liệu này hướng dẫn cách đăng nhập và tự quản lý
+nội dung.
 
-Website gồm 2 phần tách rời nhau:
+## Hai địa chỉ cần nhớ
 
-| Phần | Là gì | Ở đâu |
+| | Là gì | Địa chỉ |
 | --- | --- | --- |
-| **Website** | Cái khách vào xem | Vercel |
-| **WordPress** | Nơi gõ bài, sửa chữ | Hosting riêng |
+| **Website** | Cái khách vào xem | `hoangminhthien.com` |
+| **WordPress** | Nơi lưu bài viết và hình ảnh | `cms.hoangminhthien.com` |
 
-Website tự động lấy bài từ WordPress mỗi lần có người truy cập. Nghĩa là
-**viết bài xong là hiện ngay, không cần làm gì thêm.**
+Website tự lấy bài từ WordPress mỗi lần có người truy cập, nên **viết bài xong là hiện
+ngay**. Không phải bấm đăng tải, không phải chờ ai duyệt, không phải nhờ kỹ thuật.
 
 ---
 
-# PHẦN 1 — Chuẩn bị WordPress
+# Phần 1 — Đăng nhập
 
-Làm một lần duy nhất, khoảng 30 phút.
+**Có hai chỗ đăng nhập, dùng hai mật khẩu khác nhau.** Đây là chỗ hay nhầm nhất.
 
-## Bước 1.1 — Mua hosting
+| Đăng nhập ở đâu | Dùng mật khẩu nào | Để làm gì |
+| --- | --- | --- |
+| `cms.hoangminhthien.com/wp-admin` | Mật khẩu WordPress thường | Quản lý tài khoản, tạo mật khẩu ứng dụng |
+| `hoangminhthien.com/#admin` | **Mật khẩu ứng dụng** | Viết bài, sửa nội dung — dùng hằng ngày |
 
-Cần một chỗ để chạy WordPress. Vào một trong các nhà cung cấp sau, mua gói rẻ nhất
-có hỗ trợ WordPress (khoảng 500.000đ–1.500.000đ/năm):
-
-- Hostinger (hostinger.vn)
-- AZDIGI (azdigi.com)
-- Tino Host (tinohost.com)
-
-Khi mua, nhớ **yêu cầu bật SSL/HTTPS** — đây là bắt buộc, thiếu nó trang quản trị
-sẽ không đăng nhập được. Hầu hết nhà cung cấp bật sẵn miễn phí, cứ nhắn hỗ trợ hỏi
-cho chắc.
-
-**Nên dùng tên miền phụ.** Nếu website chính là `hoangminhthien.com` thì đặt
-WordPress ở `cms.hoangminhthien.com`. Nhắn bộ phận hỗ trợ của hosting: *"Cho mình
-tạo subdomain cms.hoangminhthien.com và cài WordPress lên đó"* — họ làm giúp.
-
-## Bước 1.2 — Cài WordPress
-
-Hầu hết hosting có nút cài WordPress tự động. Tìm mục tên **"WordPress"**,
-**"Auto Installer"** hoặc **"Softaculous"** trong trang quản lý hosting, bấm cài.
-
-Trong lúc cài, nó hỏi:
-
-| Ô | Điền gì |
-| --- | --- |
-| Site Name | HoangMinhThien |
-| Admin Username | Tự đặt — **ghi lại ngay** |
-| Admin Password | Tự đặt, nên dài và khó đoán — **ghi lại ngay** |
-| Admin Email | Email của bạn |
-
-> **Ghi 2 dòng Username và Password vào chỗ an toàn.** Mất là phải nhờ hosting khôi
-> phục, rất mất công.
-
-## Bước 1.3 — Đăng nhập WordPress
-
-Mở trình duyệt, vào địa chỉ (thay bằng tên miền thật của bạn):
+## Bước 1 — Đăng nhập WordPress
 
 ```
 https://cms.hoangminhthien.com/wp-admin
 ```
 
-Nhập Username và Password vừa đặt ở bước 1.2.
+Nhập tên đăng nhập và mật khẩu WordPress được cấp.
 
-Vào được là thấy màn hình quản trị màu xám, bên trái có menu dọc. Đó là WordPress.
+Đây **chưa phải** nơi làm việc hằng ngày. Chỉ vào đây để tạo mật khẩu ứng dụng ở bước 2
+và quản lý tài khoản nhân viên.
 
-## Bước 1.4 — Bật đường dẫn tĩnh ⚠️ QUAN TRỌNG NHẤT
+## Bước 2 — Tạo Mật khẩu ứng dụng ⚠️
 
-**Bỏ qua bước này là website sẽ không lấy được bài.** Đây là lỗi hay gặp nhất.
+Mật khẩu ứng dụng là chuỗi riêng để vào trang quản trị website, **khác** mật khẩu
+WordPress ở bước 1.
 
-1. Nhìn menu bên trái, kéo xuống cuối, bấm **Cài đặt** (Settings)
-2. Bấm mục con **Đường dẫn tĩnh** (Permalinks)
-3. Chọn ô tròn **Tên bài viết** (Post name)
-4. Kéo xuống dưới cùng, bấm **Lưu thay đổi** (Save Changes)
+1. Menu trái → **Thành viên** (Users) → **Hồ sơ** (Profile)
+2. Kéo xuống gần cuối trang, tìm **Mật khẩu ứng dụng** (Application Passwords)
+3. Ô tên gõ gì cũng được, ví dụ `Trang quan tri`
+4. Bấm **Thêm mật khẩu ứng dụng mới**
+5. Màn hình hiện chuỗi dạng `abcd EFGH ijkl MNOP qrst UVWX`
 
-> Bấm **Lưu thay đổi** kể cả khi thấy nó đã chọn sẵn "Tên bài viết". Thao tác bấm
-> Lưu mới là thứ khiến WordPress ghi lại file cấu hình cần thiết.
+> **Chép chuỗi đó lại ngay và cất kỹ.** Đóng trang đi là không xem lại được — mất thì
+> phải tạo cái mới, không lấy lại được cái cũ.
 
-## Bước 1.5 — Cài plugin kết nối
+## Bước 3 — Vào trang quản trị website
 
-Bạn được gửi kèm một file tên **`hoangminhthien-connector.zip`**. Nếu chưa có, hỏi
-người làm website.
+```
+https://hoangminhthien.com/#admin
+```
 
-1. Menu bên trái, bấm **Plugin** (Plugins)
-2. Bấm nút **Cài mới** (Add New) ở trên cùng
-3. Bấm nút **Tải plugin lên** (Upload Plugin) ở trên cùng
-4. Bấm **Chọn tệp** (Choose File), chọn file `hoangminhthien-connector.zip`
-5. Bấm **Cài đặt ngay** (Install Now)
-6. Đợi vài giây, bấm **Kích hoạt Plugin** (Activate Plugin)
+- **Tên đăng nhập**: giống tên đăng nhập WordPress
+- **Application Password**: dán chuỗi vừa chép ở bước 2
 
-Xong bước này, WordPress tự tạo sẵn 2 danh mục **Khoá Học** và **Review Dự Án**.
+Vào được sẽ thấy tên mình ở góc trên, kèm nhãn **Quản trị viên** hoặc **Nhân viên**.
 
-## Bước 1.6 — Khai báo địa chỉ website
+Địa chỉ này không có trong menu website, khách vào xem không nhìn thấy. Nhưng ai biết
+địa chỉ vẫn phải đăng nhập mới vào được.
 
-1. Menu bên trái, bấm **Cài đặt** → **HoangMinhThien**
-2. Ở ô **Địa chỉ website**, gõ địa chỉ website chính, ví dụ:
-   ```
-   https://hoangminhthien.com
-   ```
-   Không có dấu `/` ở cuối.
-3. Bấm **Lưu thay đổi**
-
-> Chưa có website trên Vercel? Cứ để trống, quay lại điền sau khi làm xong Phần 2.
-
-## Bước 1.7 — Kiểm tra
-
-Vẫn ở trang **Cài đặt → HoangMinhThien**, nhìn bảng **Tình trạng** phía trên.
-
-**Tất cả các dòng phải là dấu ✅ màu xanh.** Dòng nào còn ⚠️ màu vàng thì đọc chữ
-bên cạnh, nó chỉ luôn cách sửa.
-
-Ở dưới cùng trang có một khung chữ màu xám ghi địa chỉ WordPress của bạn —
-**chép lại đoạn đó**, Phần 2 sẽ cần dùng.
+> **Muốn đổi sang tài khoản khác phải bấm Đăng xuất trước.** Nếu không, lần sau mở
+> trang sẽ tự vào lại bằng tài khoản cũ.
 
 ---
 
-# PHẦN 2 — Đưa website lên mạng (Vercel)
+# Phần 2 — Viết bài
 
-Làm một lần duy nhất, khoảng 15 phút.
-
-## Bước 2.1 — Tạo tài khoản Vercel
-
-1. Vào **vercel.com**
-2. Bấm **Sign Up**
-3. Chọn **Continue with GitHub**
-4. Nếu chưa có GitHub, nó sẽ hướng dẫn tạo — cứ làm theo
-5. Chọn gói **Hobby** (miễn phí)
-
-## Bước 2.2 — Đưa mã nguồn vào
-
-Bước này cần người làm website hỗ trợ: họ sẽ cấp cho bạn quyền vào kho mã nguồn
-trên GitHub. Nhắn họ: *"Cho mình quyền truy cập repo website để kết nối Vercel"*.
-
-## Bước 2.3 — Tạo dự án trên Vercel
-
-1. Ở trang chủ Vercel, bấm **Add New** → **Project**
-2. Tìm dòng có tên kho mã nguồn website, bấm **Import**
-3. Màn hình cấu hình hiện ra — **chưa bấm Deploy vội**, làm bước 2.4 trước
-
-## Bước 2.4 — Khai báo địa chỉ WordPress ⚠️ QUAN TRỌNG
-
-Vẫn ở màn hình đó, tìm mục **Environment Variables** (Biến môi trường), bấm mở ra.
-
-Thêm lần lượt **3 dòng** sau. Mỗi dòng gõ tên vào ô **Key**, giá trị vào ô **Value**,
-rồi bấm **Add**:
-
-| Key (gõ chính xác từng ký tự) | Value |
-| --- | --- |
-| `VITE_WP_API_URL` | Địa chỉ WordPress đã chép ở bước 1.7, ví dụ `https://cms.hoangminhthien.com` |
-| `VITE_WP_COURSES_CATEGORY` | `khoa-hoc` |
-| `VITE_WP_PROJECTS_CATEGORY` | `review-du-an` |
-
-> Gõ sai một chữ là website không lấy được bài. Kiểm tra kỹ, đặc biệt là dấu gạch
-> ngang `-` và dấu gạch dưới `_`.
-
-## Bước 2.5 — Chạy
-
-Bấm nút **Deploy**. Đợi 1–2 phút, thấy hình pháo hoa là xong.
-
-Bấm **Continue to Dashboard**, sẽ thấy địa chỉ tạm dạng
-`ten-du-an.vercel.app`. Mở thử xem website đã lên chưa.
-
-## Bước 2.6 — Gắn tên miền thật
-
-1. Trong dự án Vercel, bấm tab **Settings** → **Domains**
-2. Gõ `hoangminhthien.com`, bấm **Add**
-3. Vercel hiện ra vài dòng thông tin kỹ thuật — **chụp màn hình gửi cho nơi bán tên
-   miền**, nhắn họ: *"Cho mình trỏ tên miền theo thông số này"*
-4. Đợi 5 phút đến vài tiếng để tên miền chạy
-
-## Bước 2.7 — Quay lại WordPress
-
-Sau khi có tên miền thật, quay lại **Cài đặt → HoangMinhThien** trong WordPress,
-điền địa chỉ website thật vào ô **Địa chỉ website** rồi Lưu (nếu bước 1.6 còn bỏ trống).
-
----
-
-# PHẦN 3 — Tài khoản và phân quyền
-
-## Có 2 loại tài khoản
-
-| Loại | Làm được gì | Vai trò trong WordPress |
-| --- | --- | --- |
-| **Quản trị viên** | Mọi thứ: sửa chữ trên các trang, đổi link mạng xã hội, viết bài, xoá bài | Quản trị viên (Administrator) |
-| **Nhân viên** | Chỉ viết bài và sửa bài của mình | Tác giả (Author) |
-
-Nhân viên đăng nhập vào sẽ **chỉ nhìn thấy mục Bài viết**, không thấy phần sửa nội
-dung trang. Đây không phải chỉ ẩn đi cho gọn — WordPress chặn thật ở phía máy chủ,
-nhân viên không có cách nào sửa được nội dung trang.
-
-## Bước 3.1 — Tạo tài khoản cho nhân viên
-
-Làm trong WordPress, tài khoản Quản trị viên:
-
-1. Menu bên trái, bấm **Thành viên** (Users) → **Thêm mới** (Add New)
-2. Điền:
-   - **Tên đăng nhập**: tên không dấu, ví dụ `nhanvien1`
-   - **Email**: email của nhân viên đó
-   - **Mật khẩu**: bấm nút tạo mật khẩu tự động, chép lại
-3. Ở ô **Vai trò** (Role) — chọn **Tác giả** (Author)
-4. Bấm **Thêm thành viên mới**
-
-> **Chọn vai trò nào?**
-> - **Tác giả (Author)** — viết bài, tự đăng, tự tải ảnh. Dùng cái này nếu tin
->   nhân viên.
-> - **Cộng tác viên (Contributor)** — viết bài nhưng **không tự đăng được**, bài
->   phải chờ bạn duyệt, và **không tải ảnh lên được**. Dùng cái này nếu muốn kiểm
->   duyệt trước khi bài lên website.
-
-Gửi tên đăng nhập và mật khẩu cho nhân viên.
-
-## Bước 3.2 — Tạo Mật khẩu ứng dụng
-
-**Mỗi người tự làm bước này cho tài khoản của mình.** Đây là mật khẩu riêng để vào
-trang quản trị của website, khác với mật khẩu WordPress.
-
-1. Đăng nhập WordPress
-2. Menu bên trái, bấm **Thành viên** → **Hồ sơ** (Profile)
-3. Kéo xuống gần cuối trang, tìm mục **Mật khẩu ứng dụng** (Application Passwords)
-4. Ở ô tên, gõ gì cũng được, ví dụ `Trang quan tri`
-5. Bấm **Thêm mật khẩu ứng dụng mới**
-6. Màn hình hiện một chuỗi dạng:
-   ```
-   abcd EFGH ijkl MNOP qrst UVWX
-   ```
-   **Chép lại ngay.** Đóng trang đi là không xem lại được nữa, phải tạo cái mới.
-
-> Không thấy mục Mật khẩu ứng dụng? Website chưa bật HTTPS. Nhắn hosting bật SSL.
-
-## Bước 3.3 — Đăng nhập trang quản trị website
-
-1. Mở website, thêm `/#admin` vào cuối địa chỉ:
-   ```
-   https://hoangminhthien.com/#admin
-   ```
-2. **Tên đăng nhập**: tên đăng nhập WordPress
-3. **Application Password**: chuỗi vừa chép ở bước 3.2 — **không phải** mật khẩu
-   WordPress thường
-4. Bấm **Đăng nhập**
-
-Vào được sẽ thấy tên mình và một nhãn ghi rõ **Quản trị viên** hoặc **Nhân viên**.
-
-> Địa chỉ này không có trong menu website, khách vào xem không thấy. Nhưng ai biết
-> địa chỉ vẫn phải đăng nhập mới vào được.
-
----
-
-# PHẦN 4 — Dùng hằng ngày
-
-## Viết bài mới
-
-1. Vào `https://hoangminhthien.com/#admin`, đăng nhập
-2. Bấm tab **Bài viết** → nút **Viết bài mới**
+1. Vào `hoangminhthien.com/#admin`, đăng nhập
+2. Tab **Bài viết** → **Viết bài mới**
 3. Gõ **tiêu đề**
-4. Gõ **nội dung** ở khung soạn thảo (có nút in đậm, in nghiêng, chèn ảnh...)
-5. Gõ **Mô tả ngắn** — đây là đoạn hiện trên trang chủ, nên viết 2–3 dòng
-6. Bên phải, khung **Danh mục**: **bắt buộc tích một trong hai** dòng có nhãn `GỐC`
-   - Tích **Khoá Học** → bài hiện ở trang Khoá Học
-   - Tích **Review Dự Án** → bài hiện ở trang Review Dự Án
+4. Gõ **nội dung** ở khung soạn thảo
+5. Gõ **Mô tả ngắn** — đoạn tóm tắt hiện trên trang chủ, nên viết 2–3 dòng
+6. Bên phải, khung **Danh mục**: tích một trong hai dòng có nhãn **GỐC**
 7. Bên phải, khung **Ảnh đại diện**: bấm **Chọn ảnh từ máy**
-8. Bên phải, khung **Thẻ**: gõ tên thẻ rồi bấm dấu **+**. Thẻ giúp khách lọc bài
+8. Bên phải, khung **Thẻ**: gõ tên thẻ rồi bấm **+**
 9. Bấm **Lưu lên WordPress**
 
-Sau khi lưu, màn hình báo rõ bài sẽ hiện ở trang nào. Mở website xem là thấy ngay.
+## Bài viết xong nhưng không thấy trên website ⚠️
 
-> **Bài không hiện ngoài website?** Gần như luôn là do một trong hai:
-> - Ô trạng thái (cạnh nút Lưu) đang để **Bản nháp** → đổi sang **Đăng công khai**
-> - Chưa tích **Khoá Học** hay **Review Dự Án** ở khung Danh mục
+Gần như luôn là một trong hai lý do, kiểm tra theo thứ tự:
+
+1. **Trạng thái đang để Bản nháp.** Ô trạng thái nằm cạnh nút Lưu. Đổi sang
+   **Đăng công khai** rồi lưu lại.
+2. **Chưa chọn danh mục gốc.** Phải tích **Khoá Học** hoặc **Review Dự Án** — hai dòng
+   có nhãn `GỐC` màu xanh.
+
+Khung Danh mục có sẵn ô báo: chưa chọn thì cảnh báo vàng, chọn rồi thì ô xanh ghi bài
+sẽ hiện ở trang nào.
+
+## Hai loại bài
+
+| Tích danh mục | Bài hiện ở |
+| --- | --- |
+| Khoá Học | Trang Khoá Học và khối "Khóa Học Thực Chiến Mới Nhất" ở trang chủ |
+| Review Dự Án | Trang Review Dự Án và khối "Phân Tích & Review Dự Án Nổi Bật" ở trang chủ |
+
+Nên tích thêm một danh mục chủ đề nữa — đó là nhãn xanh hiển thị trên thẻ bài.
+
+## Thẻ
+
+Thẻ hiện thành pill dạng `#Phân tích kỹ thuật` trên thẻ bài. Khách bấm vào là lọc ra
+tất cả bài cùng thẻ. Gõ tên thẻ mới rồi bấm **+** là tạo được ngay, không cần vào
+WordPress.
+
+---
+
+# Phần 3 — Sửa nội dung website
+
+Chỉ tài khoản Quản trị viên làm được.
 
 ## Sửa chữ trên các trang
 
-Chỉ Quản trị viên làm được.
+Tab **Nội dung trang** → sửa các ô → **Xem trước** (chỉ mình bạn thấy) → **Lưu lên
+WordPress** (khách mới thấy).
 
-1. Vào `#admin`, tab **Nội dung trang**
-2. Sửa các ô — tiêu đề, mô tả, con số thành tựu, nội dung trang Giới Thiệu...
-3. Bấm **Xem trước** để xem thử (chỉ mình bạn thấy)
-4. Ưng rồi bấm **Lưu lên WordPress** — lúc này mọi khách mới thấy
+Lỡ sửa hỏng: bấm **Về mặc định** rồi **Lưu lên WordPress**.
 
-## Đổi ảnh chân dung
+## Đổi ảnh
 
-Chỉ Quản trị viên làm được. Đây là ảnh lớn ở đầu trang chủ và trang Giới Thiệu.
+| Ảnh | Sửa ở đâu | Nên dùng |
+| --- | --- | --- |
+| Chân dung đầu trang | Nội dung trang → Khối Hero | Dọc 4:5, mặt ở nửa trên |
+| Ảnh sự kiện & hội thảo | Nội dung trang → Hình ảnh sự kiện | Ngang 16:9, nên để 4 tấm |
+| Ảnh từng bài viết | Bài viết → Ảnh đại diện | Ngang 16:9, rộng từ 800px |
 
-1. Vào `#admin`, tab **Nội dung trang**
-2. Mục **Khối Hero (đầu trang chủ)** → tìm ô **Ảnh chân dung**
-3. Bấm **Tải ảnh từ máy**, chọn ảnh
-4. Bấm **Lưu lên WordPress**
+Ảnh sự kiện còn sửa được tiêu đề, chú thích, và thêm bớt số lượng tuỳ ý.
 
-Nên dùng **ảnh dọc tỉ lệ 4:5**, khuôn mặt nằm ở nửa trên (phần dưới ảnh bị chữ che).
+## Đổi liên kết mạng xã hội
 
-## Đổi ảnh sự kiện & hội thảo
-
-Chỉ Quản trị viên làm được.
-
-1. Vào `#admin`, tab **Nội dung trang**
-2. Kéo xuống mục **Hình ảnh sự kiện & hội thảo**
-3. Với mỗi ảnh:
-   - Bấm **Tải ảnh từ máy** để đổi ảnh
-   - Sửa **Tiêu đề ảnh** và **Chú thích** (chữ hiện đè lên góc dưới ảnh)
-   - Bấm biểu tượng thùng rác để xoá ảnh đó
-4. Bấm **Thêm ảnh** nếu muốn thêm
-5. Bấm **Lưu lên WordPress**
-
-Ảnh dùng chung cho cả trang chủ và trang Giới Thiệu. Nên để **4 ảnh** cho vừa một
-hàng, ảnh ngang tỉ lệ 16:9, tối thiểu 800px chiều ngang.
-
-## Đổi link mạng xã hội
-
-Tab **Liên kết** — sửa link Facebook, TikTok, YouTube, Telegram, X, số người theo
-dõi, email liên hệ. Xong bấm **Lưu lên WordPress**.
-
-## Khi nào phải deploy lại trên Vercel?
-
-**Gần như không bao giờ.** Viết bài, sửa chữ, đổi link — tất cả hiện ngay, không
-cần đụng vào Vercel.
-
-Chỉ cần deploy lại khi **đổi địa chỉ WordPress** (3 biến ở bước 2.4). Cách làm:
-
-1. Vào Vercel, mở dự án
-2. Tab **Settings** → **Environment Variables**, sửa giá trị, bấm **Save**
-3. Tab **Deployments**, bấm dấu **⋯** ở dòng trên cùng → **Redeploy** → **Redeploy**
+Tab **Liên kết** — link và số người theo dõi của Facebook, TikTok, YouTube, Telegram,
+X, cùng email và link Telegram liên hệ. Mỗi kênh có nút **Mở thử** để kiểm tra link.
 
 ---
 
-# PHẦN 5 — Gặp sự cố
+# Phần 4 — Tài khoản nhân viên
+
+| Loại | Làm được gì | Vai trò WordPress |
+| --- | --- | --- |
+| Quản trị viên | Mọi thứ | Administrator |
+| Nhân viên | Chỉ viết và sửa bài | Author |
+
+Nhân viên đăng nhập chỉ thấy mục **Bài viết**. Đây không phải chỉ ẩn cho gọn — hệ thống
+chặn thật ở phía máy chủ.
+
+## Tạo tài khoản nhân viên
+
+Trong WordPress, bằng tài khoản Quản trị viên:
+
+1. **Thành viên** → **Thêm mới**
+2. **Tên đăng nhập**: chữ không dấu, vd `nhanvien1`
+3. **Email**, **Mật khẩu** (bấm nút tạo tự động, chép lại)
+4. Ô **Vai trò**: chọn **Tác giả**
+5. **Thêm thành viên mới**
+
+> Muốn kiểm duyệt bài trước khi lên website: chọn **Cộng tác viên** thay vì Tác giả.
+> Nhân viên vẫn viết bài nhưng không tự đăng được, bài chuyển sang Chờ duyệt.
+
+Rồi bảo nhân viên tự làm **Phần 1 bước 2 và 3**. Mỗi người tự tạo mật khẩu ứng dụng
+riêng, không dùng chung được.
+
+---
+
+# Phần 5 — Gặp sự cố
 
 | Hiện tượng | Cách xử lý |
 | --- | --- |
-| Website hiện bài mẫu cũ, không thấy bài mình viết | Kiểm tra 3 biến ở bước 2.4 gõ đúng chưa, rồi Redeploy |
-| Bài viết xong không hiện | Xem lại 2 nguyên nhân ở Phần 4 (trạng thái + danh mục) |
-| Không đăng nhập được `#admin`, báo sai mật khẩu | Đang dùng nhầm mật khẩu WordPress. Phải dùng **Mật khẩu ứng dụng** ở bước 3.2 |
-| Không tìm thấy mục Mật khẩu ứng dụng | Website chưa có HTTPS — nhắn hosting bật SSL |
-| Trang **Cài đặt → HoangMinhThien** báo ⚠️ vàng | Đọc chữ bên cạnh dòng đó, nó chỉ luôn cách sửa |
-| Bấm Lưu ở tab Nội dung báo lỗi 404 | Plugin chưa cài hoặc chưa kích hoạt — làm lại bước 1.5 |
-| Nhân viên không thấy tab Nội dung trang | Đúng như thiết kế. Nhân viên chỉ được viết bài |
+| Đăng nhập `#admin` báo sai mật khẩu dù gõ đúng | Đang dùng nhầm mật khẩu WordPress. Phải dùng Mật khẩu ứng dụng |
+| Vào `#admin` thấy sẵn tài khoản người khác | Phiên cũ còn lưu. Bấm Đăng xuất rồi đăng nhập lại |
+| Viết bài xong không thấy trên website | Xem Phần 2 — trạng thái và danh mục |
+| Nhân viên không thấy tab Nội dung trang | Đúng như thiết kế |
+| Sửa chữ xong website vẫn chưa đổi | Kiểm tra đã bấm **Lưu lên WordPress** chưa, hay mới chỉ Xem trước |
+| Website hiện nội dung mẫu lạ | WordPress đang gặp sự cố. Liên hệ người làm website |
 
-**Website không bao giờ trắng trang.** Nếu WordPress hỏng hoặc mất mạng, website tự
-hiện lại nội dung mẫu có sẵn thay vì báo lỗi cho khách.
+**Website không bao giờ trắng trang.** WordPress hỏng hoặc mất mạng thì website tự hiện
+lại nội dung mẫu có sẵn thay vì báo lỗi cho khách.
 
 ---
 
-# Bảng ghi thông tin
+# Phụ lục — Thông tin kỹ thuật
 
-In trang này ra, điền vào và cất chỗ an toàn:
+Phần này dành cho người bảo trì, khách hàng không cần đọc.
+
+## Hệ thống thực tế đang chạy
+
+| Thành phần | Nhà cung cấp | Ghi chú |
+| --- | --- | --- |
+| Tên miền `hoangminhthien.com` | GoDaddy | Nameserver trỏ sang Vercel |
+| DNS | Vercel | `ns1/ns2.vercel-dns.com` — bản ghi `cms` kiểu A trỏ về IP Hostinger |
+| Website | Vercel | Deploy tự động từ nhánh `main` của repo |
+| WordPress | Hostinger | Gói 48 tháng, `cms.hoangminhthien.com`, LiteSpeed + PHP 8.3 |
+
+## Biến môi trường trên Vercel
 
 ```
-Địa chỉ WordPress:      https://_________________________________
-
-Tài khoản WordPress
-  Tên đăng nhập:        _________________________________
-  Mật khẩu:             _________________________________
-
-Mật khẩu ứng dụng
-  (dùng cho #admin):    _________________________________
-
-Địa chỉ trang quản trị: https://_________________/#admin
-
-Tài khoản Vercel:       _________________________________
-Nhà cung cấp hosting:   _________________________________
+VITE_WP_API_URL=https://cms.hoangminhthien.com
+VITE_WP_COURSES_CATEGORY=khoa-hoc
+VITE_WP_PROJECTS_CATEGORY=review-du-an
 ```
 
-> Đừng gửi các thông tin này qua tin nhắn công khai. Nếu lỡ lộ Mật khẩu ứng dụng,
-> vào **Thành viên → Hồ sơ**, xoá mật khẩu cũ đi rồi tạo cái mới — không ảnh hưởng
-> gì đến tài khoản.
+Đây là biến build-time, đổi giá trị phải **Redeploy** mới có tác dụng. Sửa nội dung hay
+viết bài thì không cần deploy lại.
+
+## Plugin WordPress
+
+`wordpress-plugin/hoangminhthien-connector.zip` — cài qua Plugin → Tải plugin lên.
+
+Plugin lo: mở custom field ra REST API, endpoint `hmt/v1/settings` lưu nội dung website,
+CORS, tự tạo 2 danh mục gốc, chặn cache LiteSpeed lên endpoint cài đặt, và trang
+**Cài đặt → HoangMinhThien** có bảng tự kiểm tra.
+
+Ô **Địa chỉ website** trong trang cài đặt plugin phải điền địa chỉ site Vercel
+(`https://hoangminhthien.com`), **không phải** địa chỉ WordPress. Bỏ trống thì CORS
+không được cấu hình và website không lấy được bài.
+
+## Lưu ý khi bảo trì
+
+- **LiteSpeed cache**: hosting cache REST API rất lâu. Plugin đã chặn cache cho endpoint
+  cài đặt, nhưng nếu thêm endpoint mới thì nhớ gọi `hmt_no_cache()`.
+- **Đường dẫn tĩnh**: permalink ở chế độ Plain sẽ làm `/wp-json/` trả 404. Code đã tự
+  chuyển sang dạng `?rest_route=` khi gặp trường hợp này, nhưng nên để permalink đúng.
+- **Đổi địa chỉ WordPress**: phải sửa cả `VITE_WP_API_URL` trên Vercel lẫn Địa chỉ
+  website trong plugin, rồi Redeploy.
