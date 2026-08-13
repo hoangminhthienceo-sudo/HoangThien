@@ -299,6 +299,58 @@ export const ContentTab: React.FC<ContentTabProps> = ({
       </Section>
 
       <Section
+        title="Banner cạnh bài viết"
+        description="Hai banner dính bên trái khi khách đọc bài viết hoặc bài review"
+      >
+        <div className="px-4 py-3 rounded-xl bg-[#F0F7FF] border border-[#BFDBFE] text-[11px] text-[#17347f] leading-relaxed">
+          Banner nào <strong>chưa có ảnh thì không hiện</strong>. Nên dùng ảnh dọc, tỉ lệ khoảng
+          3:4 hoặc 1:2, rộng từ 400px. Trên màn hình nhỏ banner tự xuống dưới danh sách bài
+          cùng chuyên mục.
+        </div>
+
+        <Repeater
+          label="Danh sách banner"
+          items={settings.articleBanners}
+          onChange={(articleBanners) => onChange({ ...settings, articleBanners })}
+          makeEmpty={() => ({ image: '', title: '', subtitle: '', link: '' })}
+          addLabel="Thêm banner"
+          renderItem={(item, update) => (
+            <>
+              <ImageField
+                value={item.image}
+                onChange={(image) => update({ image })}
+                credentials={credentials}
+                canUpload={permissions.canUploadFiles}
+                aspect="portrait"
+              />
+              <InlineInput
+                label="Chữ lớn đè lên ảnh (không bắt buộc)"
+                value={item.title}
+                onChange={(title) => update({ title })}
+                placeholder="vd: Khoá học Masterclass 2026"
+              />
+              <InlineInput
+                label="Chữ nhỏ (không bắt buộc)"
+                value={item.subtitle}
+                onChange={(subtitle) => update({ subtitle })}
+                placeholder="vd: Ưu đãi 30% tới hết tháng 3"
+              />
+              <InlineInput
+                label="Bấm vào banner thì đi đâu"
+                value={item.link}
+                onChange={(link) => update({ link })}
+                placeholder="vd: /khoa-hoc  hoặc  https://t.me/..."
+              />
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Để trống hai ô chữ thì banner chỉ hiện ảnh. Để trống ô đường dẫn thì banner
+                không bấm được.
+              </p>
+            </>
+          )}
+        />
+      </Section>
+
+      <Section
         title="4 ô thành tựu"
         description="Dãy số liệu hiển thị ở trang chủ và trang Giới Thiệu"
       >

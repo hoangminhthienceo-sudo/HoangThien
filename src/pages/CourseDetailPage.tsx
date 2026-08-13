@@ -5,7 +5,7 @@ import { useCourses } from '../hooks/useContent';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { TagPills } from '../components/TagPills';
 import { PostContent } from '../components/PostContent';
-import { TableOfContents } from '../components/TableOfContents';
+import { ArticleBanners, visibleBanners } from '../components/ArticleBanners';
 import { CategoryNav } from '../components/CategoryNav';
 import { NotFoundPage } from './NotFoundPage';
 import { preparePost } from '../lib/postContent';
@@ -18,6 +18,8 @@ export const CourseDetailPage: React.FC = () => {
 
   const course = courses.find((item) => item.slug === slug);
   const prepared = useMemo(() => preparePost(course?.content ?? ''), [course?.content]);
+
+  const banners = visibleBanners(settings.articleBanners);
 
   const sameCategory = useMemo(
     () => (course ? courses.filter((item) => item.category === course.category) : []),
@@ -59,16 +61,16 @@ export const CourseDetailPage: React.FC = () => {
 
         <div
           className={`grid grid-cols-1 gap-6 xl:gap-8 items-start lg:grid-cols-[minmax(0,1fr)_18rem] ${
-            prepared.headings.length > 0
-              ? 'xl:grid-cols-[14rem_minmax(0,1fr)_19rem]'
+            banners.length > 0
+              ? 'xl:grid-cols-[15rem_minmax(0,1fr)_19rem]'
               : 'xl:grid-cols-[minmax(0,1fr)_19rem]'
           }`}
         >
 
-          {/* CỘT TRÁI — Mục lục, dính khi cuộn */}
-          {prepared.headings.length > 0 && (
+          {/* CỘT TRÁI — Banner tuỳ chỉnh, dính khi cuộn */}
+          {banners.length > 0 && (
             <div className="hidden xl:block sticky top-24">
-              <TableOfContents headings={prepared.headings} />
+              <ArticleBanners banners={settings.articleBanners} />
             </div>
           )}
 
@@ -129,17 +131,6 @@ export const CourseDetailPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Mục lục bản rút gọn cho màn hình nhỏ */}
-                {prepared.headings.length > 0 && (
-                  <details className="xl:hidden mb-8 rounded-2xl border border-[#E0F2FE] bg-[#F8FBFF] overflow-hidden">
-                    <summary className="px-4 py-3 text-xs font-extrabold text-slate-700 cursor-pointer select-none">
-                      Mục lục bài viết ({prepared.headings.length} mục)
-                    </summary>
-                    <div className="px-2 pb-2">
-                      <TableOfContents headings={prepared.headings} />
-                    </div>
-                  </details>
-                )}
 
                 {/* Nội dung bài viết */}
                 <PostContent html={prepared.html} />
@@ -182,6 +173,13 @@ export const CourseDetailPage: React.FC = () => {
               buildUrl={courseUrl}
               seeAllUrl={ROUTES.courses}
             />
+
+            {/* Màn hình nhỏ chưa có cột trái nên banner xuống đây */}
+            {banners.length > 0 && (
+              <div className="xl:hidden mt-4">
+                <ArticleBanners banners={settings.articleBanners} />
+              </div>
+            )}
           </div>
 
         </div>

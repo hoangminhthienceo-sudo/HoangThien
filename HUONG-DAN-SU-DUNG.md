@@ -108,10 +108,6 @@ hàng tiêu đề, gộp tách ô, xoá cả bảng. Kéo đường viền giữ
 **Chèn video YouTube**: bấm nút YouTube rồi dán đường dẫn video. Video hiện ngay trong
 bài, khách xem không cần rời trang.
 
-> **Mẹo**: dùng nút **Tiêu đề lớn** để chia bài thành các mục. Website tự dựng
-> **mục lục** từ các tiêu đề đó, hiện cố định bên trái bài viết cho khách nhảy nhanh
-> giữa các phần. Bài không có tiêu đề nào thì không có mục lục.
-
 > Bảng quá rộng trên điện thoại sẽ tự cuộn ngang trong khung, không làm vỡ trang.
 
 ## Bài viết xong nhưng không thấy trên website ⚠️
@@ -195,6 +191,28 @@ Lỡ sửa hỏng: bấm **Về mặc định** rồi **Lưu lên WordPress**.
 
 Ảnh có gắn link sẽ hiện một mũi tên nhỏ ở góc trên khi rê chuột vào, để khách biết bấm
 được.
+
+## Banner cạnh bài viết
+
+Hai banner dính bên trái khi khách đang đọc một bài viết — dùng để quảng bá khoá học,
+ưu đãi, hoặc kéo về kênh Telegram.
+
+1. Vào `/admin`, tab **Nội dung trang**
+2. Kéo xuống mục **Banner cạnh bài viết**
+3. Với mỗi banner:
+   - **Tải ảnh từ máy** — nên dùng ảnh dọc, tỉ lệ khoảng 3:4 hoặc 1:2, rộng từ 400px
+   - **Chữ lớn** và **chữ nhỏ** đè lên ảnh — để trống cả hai thì banner chỉ hiện ảnh
+   - **Bấm vào banner thì đi đâu** — điền `/khoa-hoc` để sang trang trong website, hoặc
+     `https://...` để mở link ngoài trong tab mới
+4. Bấm **Lưu lên WordPress**
+
+| Tình huống | Kết quả |
+| --- | --- |
+| Banner chưa có ảnh | Không hiện, không chiếm chỗ |
+| Cả hai banner đều trống | Bài viết tự giãn rộng ra, không để lại khoảng trắng |
+| Màn hình nhỏ hơn máy tính | Banner tự xuống dưới danh sách bài cùng chuyên mục |
+
+Bấm **Thêm banner** nếu muốn nhiều hơn hai cái.
 
 ## Đổi liên kết mạng xã hội
 

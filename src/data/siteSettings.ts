@@ -30,6 +30,17 @@ export interface GalleryItem {
   link?: string;
 }
 
+/** Banner tuỳ chỉnh hiển thị cạnh bài viết */
+export interface ArticleBanner {
+  /** Ảnh banner. Bỏ trống thì banner không hiện. */
+  image: string;
+  /** Chữ đè lên ảnh, bỏ trống thì chỉ hiện ảnh */
+  title: string;
+  subtitle: string;
+  /** Bấm vào banner đi đâu. Link ngoài mở tab mới, link trong site chuyển tại chỗ. */
+  link: string;
+}
+
 export interface Milestone {
   year: string;
   title: string;
@@ -102,6 +113,8 @@ export interface SiteSettings {
   };
   /** Thư viện ảnh sự kiện, dùng chung cho trang chủ và trang Giới Thiệu */
   gallery: GalleryItem[];
+  /** Banner dính bên trái trang bài viết. Banner nào chưa có ảnh thì không hiện. */
+  articleBanners: ArticleBanner[];
   social: SocialChannel[];
   contact: {
     email: string;
@@ -278,6 +291,11 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
       title: 'Offline Tín Hiệu & Giao Lưu',
       caption: 'Kết nối thành viên Telegram',
     },
+  ],
+
+  articleBanners: [
+    { image: '', title: '', subtitle: '', link: '' },
+    { image: '', title: '', subtitle: '', link: '' },
   ],
 
   social: SOCIAL_CHANNELS,
