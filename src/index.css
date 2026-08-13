@@ -196,6 +196,16 @@
 .prose-editor.resize-cursor {
   cursor: col-resize;
 }
+/* TipTap tự bọc bảng trong .tableWrapper — cho nó cuộn ngang khi khung soạn
+   thảo hẹp, thay vì để bảng đẩy vỡ cả khung */
+.prose-editor .tableWrapper {
+  overflow-x: auto;
+  margin: 0 0 0.75rem;
+}
+.prose-editor .tableWrapper table {
+  margin: 0;
+  min-width: 28rem;
+}
 
 .prose-editor iframe,
 .post-content iframe {
@@ -315,17 +325,47 @@
   border-top: 1px solid #e0f2fe;
   margin: 2rem 0;
 }
-/* Bảng rộng thì cuộn ngang trong khung, không đẩy vỡ cả trang */
-.post-content table {
-  display: block;
+/* --- Bảng trong bài viết ---
+   Bảng nằm trong khung cuộn riêng (do preparePost bọc sẵn). Nhờ vậy bảng giữ
+   nguyên cách tính chiều rộng cột của trình duyệt, chỉ phần khung là cuộn.  */
+.post-content .post-table-scroll {
   overflow-x: auto;
-  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1rem;
+  border: 1px solid #dbe5f0;
+  border-radius: 0.75rem;
+  /* Thanh cuộn mảnh, luôn thấy được để biết là kéo ngang được */
+  scrollbar-width: thin;
 }
-@media (min-width: 40rem) {
-  .post-content table {
-    display: table;
-    white-space: normal;
-  }
+.post-content .post-table-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.post-content .post-table-scroll::-webkit-scrollbar-thumb {
+  background: #93c5fd;
+  border-radius: 9999px;
+}
+.post-content .post-table-scroll table {
+  margin: 0;
+  border: none;
+  /* Hẹp hơn mức này thì chữ trong ô bị bóp nát, thà cho cuộn ngang */
+  min-width: 34rem;
+  table-layout: auto;
+}
+.post-content .post-table-scroll th,
+.post-content .post-table-scroll td {
+  white-space: normal;
+}
+.post-content .post-table-scroll tr > *:first-child {
+  border-left: none;
+}
+.post-content .post-table-scroll tr > *:last-child {
+  border-right: none;
+}
+.post-content .post-table-scroll tr:first-child > * {
+  border-top: none;
+}
+.post-content .post-table-scroll tr:last-child > * {
+  border-bottom: none;
 }
 
 /* Custom Scrollbar */

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface PostContentProps {
-  /** HTML đã qua preparePost() — đã lọc sạch và gắn id tiêu đề */
+  /** HTML đã qua preparePost() — đã lọc sạch, gắn id tiêu đề, bọc khung cuộn cho bảng */
   html: string;
   className?: string;
 }

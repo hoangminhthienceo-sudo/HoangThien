@@ -35,6 +35,18 @@ export const preparePost = (rawHtml: string): PreparedPost => {
   });
 
   const doc = new DOMParser().parseFromString(clean, 'text/html');
+
+  // Bảng rộng hơn màn hình thì phải cuộn ngang trong khung riêng của nó.
+  // Bọc ở đây thay vì ép chính thẻ <table> thành khối cuộn — làm thế sẽ phá
+  // cách trình duyệt tính toán chiều rộng các cột.
+  doc.body.querySelectorAll('table').forEach((table) => {
+    if (table.parentElement?.classList.contains('post-table-scroll')) return;
+    const wrapper = doc.createElement('div');
+    wrapper.className = 'post-table-scroll';
+    table.parentNode?.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  });
+
   const used = new Set<string>();
 
   doc.body.querySelectorAll('h2, h3').forEach((el, index) => {
