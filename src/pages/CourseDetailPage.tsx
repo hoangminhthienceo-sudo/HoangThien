@@ -4,6 +4,7 @@ import { BookOpen, CheckCircle2, Send, User, Clock, GraduationCap, ArrowLeft } f
 import { useCourses } from '../hooks/useContent';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { TagPills } from '../components/TagPills';
+import { PostContent } from '../components/PostContent';
 import { NotFoundPage } from './NotFoundPage';
 import { ROUTES, courseUrl } from '../lib/routes';
 
@@ -105,6 +106,9 @@ export const CourseDetailPage: React.FC = () => {
                 <strong className="text-slate-900 text-sm font-bold">{course.level}</strong>
               </div>
             </div>
+
+            {/* Nội dung bài viết soạn từ trình soạn thảo */}
+            <PostContent html={course.content} className="mb-10" />
 
             {/* Nội dung bài học */}
             {course.curriculum.length > 0 && (

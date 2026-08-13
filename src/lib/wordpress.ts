@@ -159,6 +159,7 @@ export const mapPostToCourse = (post: WPPost): Course => {
     rating: metaNumber(post, 'rating') ?? 5,
     studentsCount: metaNumber(post, 'students_count') ?? 0,
     curriculum,
+    content: post.content?.rendered ?? '',
     tags,
     sourceUrl: post.link,
   };
@@ -187,6 +188,7 @@ export const mapPostToProject = (post: WPPost): ProjectReview => {
     risks: metaList(post, 'risks') ?? [],
     onChainMetrics: meta(post, 'onchain_metrics'),
     author: meta(post, 'author_name') ?? authorName(post),
+    content: post.content?.rendered ?? '',
     tags: postTags(post),
     sourceUrl: post.link,
   };

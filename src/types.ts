@@ -32,6 +32,8 @@ export interface Course {
   rating: number;
   studentsCount: number;
   curriculum: string[];
+  /** Nội dung bài soạn trong trình soạn thảo, dạng HTML từ WordPress */
+  content: string;
   tags: PostTag[];
   isFeatured?: boolean;
   /** Link bài gốc trên WordPress (chỉ có khi bài đến từ WP) */
@@ -57,6 +59,8 @@ export interface ProjectReview {
   risks: string[];
   onChainMetrics?: string;
   author: string;
+  /** Nội dung bài soạn trong trình soạn thảo, dạng HTML từ WordPress */
+  content: string;
   tags: PostTag[];
   /** Link bài gốc trên WordPress (chỉ có khi bài đến từ WP) */
   sourceUrl?: string;

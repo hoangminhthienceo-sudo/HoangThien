@@ -34,7 +34,7 @@ export const COURSE_CATEGORIES = [
 ];
 
 /** Slug sinh tự động từ tiêu đề, khỏi phải gõ tay và luôn khớp với tiêu đề */
-const COURSES_RAW: Omit<Course, 'slug'>[] = [
+const COURSES_RAW: Omit<Course, 'slug' | 'content'>[] = [
   {
     id: 'course-1',
     title: '10 dạng scam Crypto phổ biến người mới cần cẩn trọng',
@@ -226,4 +226,6 @@ const COURSES_RAW: Omit<Course, 'slug'>[] = [
 export const COURSES_DATA: Course[] = COURSES_RAW.map((course) => ({
   ...course,
   slug: slugify(course.title),
+  // Dữ liệu mẫu không có nội dung dài; bài thật từ WordPress sẽ có
+  content: '',
 }));

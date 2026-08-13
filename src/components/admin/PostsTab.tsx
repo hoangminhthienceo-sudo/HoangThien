@@ -328,6 +328,8 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials, permissions }) 
                 <RichTextEditor
                   value={draft.content}
                   onChange={(content) => patchDraft({ content })}
+                  credentials={credentials}
+                  canUpload={permissions.canUploadFiles}
                 />
               </div>
               <TextAreaField

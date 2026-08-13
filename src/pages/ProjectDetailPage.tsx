@@ -4,6 +4,7 @@ import { AlertTriangle, Check, Send, ArrowLeft, PieChart, TrendingUp } from 'luc
 import { useProjects } from '../hooks/useContent';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { TagPills } from '../components/TagPills';
+import { PostContent } from '../components/PostContent';
 import { NotFoundPage } from './NotFoundPage';
 import { ROUTES, projectUrl } from '../lib/routes';
 
@@ -80,6 +81,9 @@ export const ProjectDetailPage: React.FC = () => {
             <p className="text-base text-slate-700 leading-relaxed font-medium mb-6">{project.summary}</p>
 
             <TagPills tags={project.tags} size="sm" className="mb-8" />
+
+            {/* Nội dung bài viết soạn từ trình soạn thảo */}
+            <PostContent html={project.content} className="mb-8" />
 
             {/* Tokenomics / cấu trúc tài chính */}
             {project.tokenomics && (

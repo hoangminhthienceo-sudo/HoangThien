@@ -79,12 +79,36 @@ Vào được sẽ thấy tên mình ở góc trên, kèm nhãn **Quản trị v
 1. Vào `hoangminhthien.com/admin`, đăng nhập
 2. Tab **Bài viết** → **Viết bài mới**
 3. Gõ **tiêu đề**
-4. Gõ **nội dung** ở khung soạn thảo
+4. Gõ **nội dung** ở khung soạn thảo (xem công cụ bên dưới)
 5. Gõ **Mô tả ngắn** — đoạn tóm tắt hiện trên trang chủ, nên viết 2–3 dòng
 6. Bên phải, khung **Danh mục**: tích một trong hai dòng có nhãn **GỐC**
 7. Bên phải, khung **Ảnh đại diện**: bấm **Chọn ảnh từ máy**
 8. Bên phải, khung **Thẻ**: gõ tên thẻ rồi bấm **+**
 9. Bấm **Lưu lên WordPress**
+
+## Công cụ trong khung soạn thảo
+
+| Nhóm | Làm được gì |
+| --- | --- |
+| Định dạng chữ | In đậm, in nghiêng, gạch chân, gạch ngang, tô nền chữ |
+| Tiêu đề | Tiêu đề lớn, tiêu đề nhỏ |
+| Canh lề | Canh trái, canh giữa, canh phải |
+| Danh sách | Gạch đầu dòng, đánh số, trích dẫn, khối mã, đường kẻ ngang |
+| Chèn | Link, **ảnh từ máy**, **video YouTube**, **bảng** |
+| Khác | Hoàn tác, làm lại |
+
+**Chèn ảnh vào giữa bài**: bấm nút ảnh trên thanh công cụ, chọn ảnh từ máy — ảnh tự
+tải lên WordPress rồi chèn vào đúng chỗ con trỏ đang đứng. Khác với *Ảnh đại diện* bên
+phải, cái đó chỉ dùng làm ảnh bìa ngoài trang chủ.
+
+**Chèn bảng**: bấm nút bảng, mặc định ra bảng 3×3 có hàng tiêu đề. Khi con trỏ nằm
+trong bảng sẽ hiện thêm một hàng công cụ riêng: thêm/xoá cột, thêm/xoá hàng, bật tắt
+hàng tiêu đề, gộp tách ô, xoá cả bảng. Kéo đường viền giữa hai cột để chỉnh độ rộng.
+
+**Chèn video YouTube**: bấm nút YouTube rồi dán đường dẫn video. Video hiện ngay trong
+bài, khách xem không cần rời trang.
+
+> Bảng quá rộng trên điện thoại sẽ tự cuộn ngang trong khung, không làm vỡ trang.
 
 ## Bài viết xong nhưng không thấy trên website ⚠️
 

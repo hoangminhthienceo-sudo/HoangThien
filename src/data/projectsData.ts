@@ -48,7 +48,7 @@ export const PROJECT_CATEGORIES = [
 ];
 
 /** Slug sinh tu dong tu tieu de */
-const PROJECTS_RAW: Omit<ProjectReview, 'slug'>[] = [
+const PROJECTS_RAW: Omit<ProjectReview, 'slug' | 'content'>[] = [
   {
     id: 'proj-1',
     title: 'Arbitrum (ARB): Hệ Sinh Thái Layer-2 Dẫn Đầu TVL & Khả Năng Mở Rộng',
@@ -209,4 +209,6 @@ const PROJECTS_RAW: Omit<ProjectReview, 'slug'>[] = [
 export const PROJECTS_DATA: ProjectReview[] = PROJECTS_RAW.map((project) => ({
   ...project,
   slug: slugify(project.title),
+  // Dữ liệu mẫu không có nội dung dài; bài thật từ WordPress sẽ có
+  content: '',
 }));
