@@ -43,9 +43,17 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand Info & DMCA */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-[#2563EB] text-white rounded-xl flex items-center justify-center font-extrabold text-xl shadow-md">
-                H
-              </div>
+              {brand.logoImage ? (
+                <img
+                  src={brand.logoImage}
+                  alt={`${brand.name}${brand.nameAccent}`}
+                  className="w-10 h-10 rounded-xl object-contain shadow-md"
+                />
+              ) : (
+                <div className="w-10 h-10 bg-[#2563EB] text-white rounded-xl flex items-center justify-center font-extrabold text-xl shadow-md">
+                  {brand.logoLetter}
+                </div>
+              )}
               <span className="text-2xl font-extrabold tracking-tight">
                 {brand.name}
                 <span className="text-[#3B82F6]">{brand.nameAccent}</span>

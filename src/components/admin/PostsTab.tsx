@@ -310,7 +310,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials, permissions }) 
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-          <div className="lg:col-span-8 space-y-5">
+          <div className="lg:col-span-9 space-y-5">
             <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm p-5 space-y-4">
               <TextField
                 label="Tiêu đề bài viết"
@@ -342,7 +342,7 @@ export const PostsTab: React.FC<PostsTabProps> = ({ credentials, permissions }) 
             </div>
           </div>
 
-          <aside className="lg:col-span-4 space-y-5">
+          <aside className="lg:col-span-3 space-y-5">
 
             {/* Ảnh đại diện */}
             <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm p-5">

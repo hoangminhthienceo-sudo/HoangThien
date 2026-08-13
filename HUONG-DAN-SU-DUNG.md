@@ -108,6 +108,10 @@ hàng tiêu đề, gộp tách ô, xoá cả bảng. Kéo đường viền giữ
 **Chèn video YouTube**: bấm nút YouTube rồi dán đường dẫn video. Video hiện ngay trong
 bài, khách xem không cần rời trang.
 
+> **Mẹo**: dùng nút **Tiêu đề lớn** để chia bài thành các mục. Website tự dựng
+> **mục lục** từ các tiêu đề đó, hiện cố định bên trái bài viết cho khách nhảy nhanh
+> giữa các phần. Bài không có tiêu đề nào thì không có mục lục.
+
 > Bảng quá rộng trên điện thoại sẽ tự cuộn ngang trong khung, không làm vỡ trang.
 
 ## Bài viết xong nhưng không thấy trên website ⚠️
@@ -171,6 +175,7 @@ Lỡ sửa hỏng: bấm **Về mặc định** rồi **Lưu lên WordPress**.
 
 | Ảnh | Sửa ở đâu | Nên dùng |
 | --- | --- | --- |
+| **Logo** | Nội dung trang → Thương hiệu & Logo | Ảnh vuông, nền trong suốt (.png), từ 200×200 |
 | Chân dung đầu trang | Nội dung trang → Khối Hero | Dọc 4:5, mặt ở nửa trên |
 | Ảnh sự kiện & hội thảo | Nội dung trang → Hình ảnh sự kiện | Ngang 16:9, nên để 4 tấm |
 | Ảnh từng bài viết | Bài viết → Ảnh đại diện | Ngang 16:9, rộng từ 800px |

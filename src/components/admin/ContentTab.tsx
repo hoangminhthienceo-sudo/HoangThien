@@ -46,9 +46,30 @@ export const ContentTab: React.FC<ContentTabProps> = ({
     <div className="space-y-5">
 
       <Section
-        title="Thương hiệu"
-        description="Tên hiển thị ở logo trên header và footer"
+        title="Thương hiệu & Logo"
+        description="Logo và tên hiển thị ở đầu trang và chân trang"
       >
+        <div className="p-4 rounded-xl bg-[#F8FBFF] border border-[#E0F2FE] space-y-3">
+          <ImageField
+            label="Ảnh logo"
+            value={settings.brand.logoImage}
+            onChange={(logoImage) => patch('brand', { logoImage })}
+            credentials={credentials}
+            canUpload={permissions.canUploadFiles}
+            aspect="square"
+          />
+          <p className="text-[11px] text-slate-500 leading-relaxed">
+            Nên dùng ảnh <strong>vuông</strong>, nền trong suốt (file .png), tối thiểu 200×200
+            pixel. Bỏ trống thì dùng ô vuông xanh có chữ cái bên dưới.
+          </p>
+          <InlineInput
+            label="Chữ cái trong ô vuông (khi chưa có ảnh logo)"
+            value={settings.brand.logoLetter}
+            onChange={(logoLetter) => patch('brand', { logoLetter })}
+            placeholder="H"
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <TextField
             label="Phần đầu tên"

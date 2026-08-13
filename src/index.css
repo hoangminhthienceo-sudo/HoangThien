@@ -226,6 +226,12 @@
 .post-content p {
   margin: 0 0 1rem;
 }
+/* Chừa chỗ cho thanh menu cố định khi nhảy tới một mục qua mục lục hoặc link #... */
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  scroll-margin-top: 6rem;
+}
 .post-content h2 {
   font-size: 1.5rem;
   font-weight: 800;

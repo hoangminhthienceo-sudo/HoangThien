@@ -9,8 +9,8 @@ interface ImageFieldProps {
   /** Cho phép tải ảnh lên (tài khoản phải có quyền upload_files) */
   canUpload: boolean;
   label?: string;
-  /** Khung xem trước: 'video' cho ảnh ngang 16:9, 'portrait' cho ảnh dọc 4:5 */
-  aspect?: 'video' | 'portrait';
+  /** Khung xem trước: ngang 16:9, dọc 4:5, hoặc vuông (logo) */
+  aspect?: 'video' | 'portrait' | 'square';
 }
 
 /**
@@ -52,7 +52,11 @@ export const ImageField: React.FC<ImageFieldProps> = ({
         {/* Xem trước */}
         <div
           className={`relative shrink-0 rounded-lg overflow-hidden bg-[#F0F7FF] border border-[#E0F2FE] ${
-            aspect === 'portrait' ? 'w-24 aspect-[4/5]' : 'w-32 aspect-video'
+            aspect === 'portrait'
+              ? 'w-24 aspect-[4/5]'
+              : aspect === 'square'
+                ? 'w-20 aspect-square'
+                : 'w-32 aspect-video'
           }`}
         >
           {value ? (

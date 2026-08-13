@@ -52,6 +52,10 @@ export interface SiteSettings {
     name: string;
     nameAccent: string;
     tagline: string;
+    /** Ảnh logo. Bỏ trống thì dùng ô chữ cái bên dưới. Nên dùng ảnh vuông, nền trong suốt. */
+    logoImage: string;
+    /** Chữ cái hiện trong ô vuông xanh khi chưa có ảnh logo */
+    logoLetter: string;
   };
   hero: {
     badge: string;
@@ -120,6 +124,8 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     name: 'HOANG',
     nameAccent: 'MINHTHIEN',
     tagline: '10 Năm Thực Chiến Tài Chính',
+    logoImage: '',
+    logoLetter: 'H',
   },
 
   hero: {

@@ -75,16 +75,6 @@ const formatDate = (iso: string): string => {
   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 };
 
-/** Lấy danh sách <li> trong nội dung bài — dùng cho giáo trình / điểm nổi bật */
-const extractListItems = (html: string, limit = 8): string[] => {
-  const el = document.createElement('div');
-  el.innerHTML = html;
-  return Array.from(el.querySelectorAll('li'))
-    .map((li) => (li.textContent ?? '').trim())
-    .filter(Boolean)
-    .slice(0, limit);
-};
-
 const meta = (post: WPPost, key: string): string | undefined => {
   const value = post.meta?.[key];
   if (value === undefined || value === null || value === '') return undefined;
@@ -139,7 +129,9 @@ const isCourseLevel = (value: string | undefined): value is Course['level'] =>
 export const mapPostToCourse = (post: WPPost): Course => {
   const category = displayCategory(post);
   const tags = postTags(post);
-  const curriculum = metaList(post, 'curriculum') ?? extractListItems(post.content?.rendered ?? '');
+  // Chỉ lấy từ custom field. Trước đây tự moi các <li> trong bài ra, làm nội
+  // dung bị lặp lại hai lần trên trang chi tiết.
+  const curriculum = metaList(post, 'curriculum') ?? [];
   const level = meta(post, 'level');
 
   return {
@@ -168,7 +160,6 @@ export const mapPostToCourse = (post: WPPost): Course => {
 export const mapPostToProject = (post: WPPost): ProjectReview => {
   const category = displayCategory(post);
   const verdict = normalizeVerdict(meta(post, 'verdict'));
-  const listItems = extractListItems(post.content?.rendered ?? '');
 
   return {
     id: `wp-project-${post.id}`,
@@ -184,7 +175,7 @@ export const mapPostToProject = (post: WPPost): ProjectReview => {
     date: formatDate(post.date),
     summary: stripHtml(post.excerpt?.rendered ?? ''),
     tokenomics: meta(post, 'tokenomics'),
-    highlights: metaList(post, 'highlights') ?? listItems,
+    highlights: metaList(post, 'highlights') ?? [],
     risks: metaList(post, 'risks') ?? [],
     onChainMetrics: meta(post, 'onchain_metrics'),
     author: meta(post, 'author_name') ?? authorName(post),

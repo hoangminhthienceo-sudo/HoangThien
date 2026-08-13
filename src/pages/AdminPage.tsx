@@ -301,7 +301,7 @@ export const AdminPage: React.FC = () => {
   // -------------------------------------------------------------------------
   return (
     <div className="min-h-screen bg-[#F0F7FF] pt-24 pb-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <div className="bg-white rounded-2xl border border-[#E0F2FE] shadow-sm p-5 sm:p-6 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">

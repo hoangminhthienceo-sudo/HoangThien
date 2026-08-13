@@ -27,9 +27,17 @@ export const Header: React.FC = () => {
             className="flex items-center space-x-3 group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-xl p-1"
             aria-label="Về trang chủ HoangMinhThien"
           >
-            <div className="w-11 h-11 bg-gradient-to-tr from-[#1D4ED8] to-[#3B82F6] text-white rounded-xl flex items-center justify-center font-extrabold text-2xl shadow-md group-hover:scale-105 transition-transform">
-              H
-            </div>
+            {settings.brand.logoImage ? (
+              <img
+                src={settings.brand.logoImage}
+                alt={`${settings.brand.name}${settings.brand.nameAccent}`}
+                className="w-11 h-11 rounded-xl object-contain shadow-md group-hover:scale-105 transition-transform"
+              />
+            ) : (
+              <div className="w-11 h-11 bg-gradient-to-tr from-[#1D4ED8] to-[#3B82F6] text-white rounded-xl flex items-center justify-center font-extrabold text-2xl shadow-md group-hover:scale-105 transition-transform">
+                {settings.brand.logoLetter}
+              </div>
+            )}
             <div className="text-left">
               <span className="text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-[#2563EB] transition-colors block">
                 {settings.brand.name}
