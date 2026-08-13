@@ -249,11 +249,11 @@ export const ProjectsPage: React.FC = () => {
                     </div>
 
                     {/* Footer */}
-                    <div className="px-5 py-3.5 bg-[#F0F7FF]/60 border-t border-[#E0F2FE] flex items-center justify-between text-xs">
-                      <span className="text-slate-500 font-medium">
+                    <div className="px-5 py-3.5 bg-[#F0F7FF]/60 border-t border-[#E0F2FE] flex items-center justify-between gap-3 text-xs">
+                      <span className="text-slate-500 font-medium min-w-0 truncate">
                         Cố vấn: <strong>{project.author}</strong>
                       </span>
-                      <span className="font-extrabold text-[#2563EB] flex items-center group-hover:translate-x-1 transition-transform">
+                      <span className="font-extrabold text-[#2563EB] flex items-center shrink-0 whitespace-nowrap group-hover:translate-x-1 transition-transform">
                         Đọc báo cáo <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
                       </span>
                     </div>

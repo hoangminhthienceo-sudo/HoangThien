@@ -200,7 +200,19 @@ Hai banner dính bên trái khi khách đang đọc một bài viết — dùng 
 1. Vào `/admin`, tab **Nội dung trang**
 2. Kéo xuống mục **Banner cạnh bài viết**
 3. Với mỗi banner:
-   - **Tải ảnh từ máy** — nên dùng ảnh dọc, tỉ lệ khoảng 3:4 hoặc 1:2, rộng từ 400px
+   - **Tải ảnh từ máy** — ảnh nên rộng từ 400px
+   - **Khung hình banner** — chọn hình dạng banner hiển thị ngoài site:
+
+     | Chọn | Kết quả |
+     | --- | --- |
+     | Theo ảnh gốc | Giữ nguyên tỉ lệ ảnh, không cắt xén |
+     | Chữ nhật ngang (16:9) | Ép thành khung ngang |
+     | Vuông (1:1) | Ép thành khung vuông |
+     | Chữ nhật dọc (3:4) | Ép thành khung dọc |
+     | Dọc cao (9:16) | Ép thành khung dọc cao, giống ảnh điện thoại |
+
+     Chọn khung khác *Theo ảnh gốc* thì ảnh bị **cắt cho vừa khung, lấy phần giữa** —
+     nên đặt nội dung quan trọng vào giữa ảnh.
    - **Chữ lớn** và **chữ nhỏ** đè lên ảnh — để trống cả hai thì banner chỉ hiện ảnh
    - **Bấm vào banner thì đi đâu** — điền `/khoa-hoc` để sang trang trong website, hoặc
      `https://...` để mở link ngoài trong tab mới

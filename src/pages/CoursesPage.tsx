@@ -253,12 +253,12 @@ export const CoursesPage: React.FC = () => {
                     </div>
 
                     {/* Footer Row */}
-                    <div className="px-5 py-3.5 bg-[#F0F7FF]/60 border-t border-[#E0F2FE] flex items-center justify-between text-xs">
-                      <span className="text-slate-500 font-medium flex items-center">
-                        <User className="w-3.5 h-3.5 mr-1 text-[#2563EB]" />
-                        {course.instructor}
+                    <div className="px-5 py-3.5 bg-[#F0F7FF]/60 border-t border-[#E0F2FE] flex items-center justify-between gap-3 text-xs">
+                      <span className="text-slate-500 font-medium flex items-center min-w-0">
+                        <User className="w-3.5 h-3.5 mr-1 shrink-0 text-[#2563EB]" />
+                        <span className="truncate">{course.instructor}</span>
                       </span>
-                      <span className="font-extrabold text-[#2563EB] flex items-center group-hover:translate-x-1 transition-transform">
+                      <span className="font-extrabold text-[#2563EB] flex items-center shrink-0 whitespace-nowrap group-hover:translate-x-1 transition-transform">
                         Xem chi tiết <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
                       </span>
                     </div>

@@ -435,9 +435,11 @@ export const HomePage: React.FC = () => {
 
                   <TagPills tags={course.tags} max={2} className="mb-3" />
 
-                  <div className="mt-auto pt-3.5 border-t border-[#F0F7FF] flex items-center justify-between text-[11px] font-bold text-[#2563EB]">
-                    <span>{course.lessonsCount} Bài học • {course.duration}</span>
-                    <span className="flex items-center group-hover:translate-x-1 transition-transform">
+                  <div className="mt-auto pt-3.5 border-t border-[#F0F7FF] flex items-center justify-between gap-3 text-[11px] font-bold text-[#2563EB]">
+                    <span className="min-w-0 truncate">
+                      {course.lessonsCount} Bài học • {course.duration}
+                    </span>
+                    <span className="flex items-center shrink-0 whitespace-nowrap group-hover:translate-x-1 transition-transform">
                       Đăng ký <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
                     </span>
                   </div>
@@ -514,9 +516,11 @@ export const HomePage: React.FC = () => {
 
                   <TagPills tags={project.tags} max={2} className="mb-3" />
 
-                  <div className="mt-auto pt-3.5 border-t border-[#F0F7FF] flex items-center justify-between text-[11px] font-bold text-[#2563EB]">
-                    <span className="text-slate-500 font-medium">Cố vấn: {project.author}</span>
-                    <span className="flex items-center group-hover:translate-x-1 transition-transform">
+                  <div className="mt-auto pt-3.5 border-t border-[#F0F7FF] flex items-center justify-between gap-3 text-[11px] font-bold text-[#2563EB]">
+                    <span className="text-slate-500 font-medium min-w-0 truncate">
+                      Cố vấn: {project.author}
+                    </span>
+                    <span className="flex items-center shrink-0 whitespace-nowrap group-hover:translate-x-1 transition-transform">
                       Đọc Review <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
                     </span>
                   </div>

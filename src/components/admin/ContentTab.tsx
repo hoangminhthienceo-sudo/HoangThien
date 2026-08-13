@@ -1,9 +1,10 @@
 import React from 'react';
-import { SiteSettings } from '../../data/siteSettings';
+import { BannerAspect, SiteSettings } from '../../data/siteSettings';
 import { WPCredentials, WPPermissions } from '../../lib/wordpressAdmin';
 import { ImageField } from './ImageField';
 import {
   InlineInput,
+  InlineSelect,
   InlineTextArea,
   ParagraphListField,
   Repeater,
@@ -303,16 +304,16 @@ export const ContentTab: React.FC<ContentTabProps> = ({
         description="Hai banner dính bên trái khi khách đọc bài viết hoặc bài review"
       >
         <div className="px-4 py-3 rounded-xl bg-[#F0F7FF] border border-[#BFDBFE] text-[11px] text-[#17347f] leading-relaxed">
-          Banner nào <strong>chưa có ảnh thì không hiện</strong>. Nên dùng ảnh dọc, tỉ lệ khoảng
-          3:4 hoặc 1:2, rộng từ 400px. Trên màn hình nhỏ banner tự xuống dưới danh sách bài
-          cùng chuyên mục.
+          Banner nào <strong>chưa có ảnh thì không hiện</strong>. Mỗi banner chọn được khung
+          hình riêng — ngang, vuông, dọc hoặc giữ nguyên tỉ lệ ảnh gốc. Ảnh nên rộng từ 400px.
+          Trên màn hình nhỏ banner tự xuống dưới danh sách bài cùng chuyên mục.
         </div>
 
         <Repeater
           label="Danh sách banner"
           items={settings.articleBanners}
           onChange={(articleBanners) => onChange({ ...settings, articleBanners })}
-          makeEmpty={() => ({ image: '', title: '', subtitle: '', link: '' })}
+          makeEmpty={() => ({ image: '', title: '', subtitle: '', link: '', aspect: 'auto' as BannerAspect })}
           addLabel="Thêm banner"
           renderItem={(item, update) => (
             <>
@@ -321,7 +322,19 @@ export const ContentTab: React.FC<ContentTabProps> = ({
                 onChange={(image) => update({ image })}
                 credentials={credentials}
                 canUpload={permissions.canUploadFiles}
-                aspect="portrait"
+                aspect={item.aspect === 'landscape' ? 'video' : item.aspect === 'square' ? 'square' : 'portrait'}
+              />
+              <InlineSelect<BannerAspect>
+                label="Khung hình banner"
+                value={item.aspect ?? 'auto'}
+                onChange={(aspect) => update({ aspect })}
+                options={[
+                  { value: 'auto', label: 'Theo ảnh gốc — không cắt xén' },
+                  { value: 'landscape', label: 'Chữ nhật ngang (16:9)' },
+                  { value: 'square', label: 'Vuông (1:1)' },
+                  { value: 'portrait', label: 'Chữ nhật dọc (3:4)' },
+                  { value: 'tall', label: 'Dọc cao (9:16)' },
+                ]}
               />
               <InlineInput
                 label="Chữ lớn đè lên ảnh (không bắt buộc)"
@@ -343,7 +356,8 @@ export const ContentTab: React.FC<ContentTabProps> = ({
               />
               <p className="text-[11px] text-slate-500 leading-relaxed">
                 Để trống hai ô chữ thì banner chỉ hiện ảnh. Để trống ô đường dẫn thì banner
-                không bấm được.
+                không bấm được. Chọn khung hình khác <em>Theo ảnh gốc</em> thì ảnh bị cắt cho
+                vừa khung, lấy phần giữa — nên đặt nội dung quan trọng vào giữa ảnh.
               </p>
             </>
           )}

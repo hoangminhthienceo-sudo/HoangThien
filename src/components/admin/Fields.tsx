@@ -186,6 +186,34 @@ export function Repeater<T>({
   );
 }
 
+/** Ô chọn gọn dùng bên trong Repeater */
+export const InlineSelect = <T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (value: T) => void;
+}) => (
+  <label className="block">
+    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{label}</span>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value as T)}
+      className="mt-1 w-full px-3 py-2 bg-white border border-[#E0F2FE] rounded-lg text-sm text-slate-900 focus:outline-none focus:border-[#2563EB]"
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </label>
+);
+
 /** Ô nhập gọn dùng bên trong Repeater */
 export const InlineInput: React.FC<{
   label: string;

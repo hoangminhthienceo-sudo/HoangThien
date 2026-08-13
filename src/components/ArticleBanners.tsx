@@ -1,13 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
-import { ArticleBanner } from '../data/siteSettings';
+import { ArticleBanner, BannerAspect } from '../data/siteSettings';
 
 interface ArticleBannersProps {
   banners: ArticleBanner[];
 }
 
 const isExternal = (url: string) => /^https?:\/\//i.test(url);
+
+/** Khung hình tương ứng với lựa chọn của quản trị viên */
+const ASPECT_CLASS: Record<Exclude<BannerAspect, 'auto'>, string> = {
+  landscape: 'aspect-[16/9]',
+  square: 'aspect-square',
+  portrait: 'aspect-[3/4]',
+  tall: 'aspect-[9/16]',
+};
 
 /** Chỉ những banner đã có ảnh mới được hiển thị */
 export const visibleBanners = (banners: ArticleBanner[]): ArticleBanner[] =>
@@ -26,6 +34,7 @@ export const ArticleBanners: React.FC<ArticleBannersProps> = ({ banners }) => {
       {items.map((banner, index) => {
         const link = banner.link?.trim();
         const hasText = Boolean(banner.title?.trim() || banner.subtitle?.trim());
+        const aspect = banner.aspect ?? 'auto';
 
         const inner = (
           <>
@@ -33,7 +42,11 @@ export const ArticleBanners: React.FC<ArticleBannersProps> = ({ banners }) => {
             <img
               src={banner.image}
               alt={banner.title || 'Banner'}
-              className="w-full h-auto block group-hover:scale-[1.03] transition-transform duration-500"
+              className={
+                aspect === 'auto'
+                  ? 'w-full h-auto block group-hover:scale-[1.03] transition-transform duration-500'
+                  : `w-full h-full object-cover block ${ASPECT_CLASS[aspect]} group-hover:scale-[1.03] transition-transform duration-500`
+              }
             />
 
             {hasText && (

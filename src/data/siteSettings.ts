@@ -30,6 +30,9 @@ export interface GalleryItem {
   link?: string;
 }
 
+/** Khung hình của banner. 'auto' = giữ nguyên tỉ lệ ảnh gốc, không cắt xén. */
+export type BannerAspect = 'auto' | 'landscape' | 'square' | 'portrait' | 'tall';
+
 /** Banner tuỳ chỉnh hiển thị cạnh bài viết */
 export interface ArticleBanner {
   /** Ảnh banner. Bỏ trống thì banner không hiện. */
@@ -39,6 +42,11 @@ export interface ArticleBanner {
   subtitle: string;
   /** Bấm vào banner đi đâu. Link ngoài mở tab mới, link trong site chuyển tại chỗ. */
   link: string;
+  /**
+   * Khung hình hiển thị. Chọn khác 'auto' thì ảnh bị cắt cho vừa khung
+   * (lấy phần giữa), nên đặt nội dung quan trọng vào giữa ảnh.
+   */
+  aspect: BannerAspect;
 }
 
 export interface Milestone {
@@ -294,8 +302,8 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   ],
 
   articleBanners: [
-    { image: '', title: '', subtitle: '', link: '' },
-    { image: '', title: '', subtitle: '', link: '' },
+    { image: '', title: '', subtitle: '', link: '', aspect: 'auto' },
+    { image: '', title: '', subtitle: '', link: '', aspect: 'auto' },
   ],
 
   social: SOCIAL_CHANNELS,

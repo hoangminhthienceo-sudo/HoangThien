@@ -116,8 +116,19 @@ const displayCategory = (post: WPPost): { slug: string; label: string } => {
 const featuredImage = (post: WPPost): string =>
   post._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? FALLBACK_THUMBNAIL;
 
-const authorName = (post: WPPost): string =>
-  post._embedded?.author?.[0]?.name ?? 'Hoàng Minh Thiên';
+/**
+ * Tên tác giả hiển thị ngoài trang.
+ *
+ * WordPress lấy mặc định là tên hiển thị của tài khoản, mà tên đó thường vẫn
+ * đang là địa chỉ email. In nguyên email lên mọi thẻ bài vừa xấu vừa mời gọi
+ * thu thập spam, nên cắt bỏ phần sau @.
+ * Muốn hiện tên đẹp thì đặt lại Tên hiển thị trong WP Admin → Hồ sơ.
+ */
+const authorName = (post: WPPost): string => {
+  const raw = post._embedded?.author?.[0]?.name?.trim();
+  if (!raw) return 'Hoàng Minh Thiên';
+  return raw.includes('@') ? raw.split('@')[0] : raw;
+};
 
 const isCourseLevel = (value: string | undefined): value is Course['level'] =>
   value === 'Người mới' || value === 'Trung cấp' || value === 'Chuyên sâu';
