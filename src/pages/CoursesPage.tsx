@@ -96,7 +96,7 @@ export const CoursesPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT SIDEBAR: Categories Menu matching Hình 2 */}
-          <aside className="lg:col-span-3 bg-white rounded-2xl border border-[#E0F2FE] shadow-sm overflow-hidden sticky top-24">
+          <aside className="lg:col-span-3 bg-white rounded-2xl border border-[#E0F2FE] shadow-sm overflow-hidden lg:sticky lg:top-24">
             
             {/* Header Box in Sidebar matching Dark/Navy header in Hình 2 */}
             <div className="bg-[#1E1B4B] text-white px-5 py-4 font-bold text-sm flex items-center justify-between">
